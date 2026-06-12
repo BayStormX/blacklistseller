@@ -105,6 +105,12 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 .entry-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .entry-actions-row{display:flex;gap:6px}
 
+/* Pending */
+.pending-card{border-color:var(--amber-500);background:var(--amber-100)}
+.status-badge{font-size:11px;padding:2px 10px;border-radius:var(--radius-pill);font-weight:700;background:var(--amber-500);color:#fff}
+.btn-approve{background:var(--mint-500);color:#fff}
+.btn-approve:hover{background:var(--mint-600)}
+
 /* Tags */
 .tag{font-size:12px;padding:4px 12px;border-radius:var(--radius-sm);white-space:nowrap;font-weight:700}
 .tag-no-delivery{background:var(--coral-100);color:var(--coral-700)}
@@ -210,6 +216,10 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
     <div class="stat-box alt-pink"><div class="stat-num" id="noDeliveryCount">0</div><div class="stat-label">เคสไม่ส่งของ</div></div>
     <div class="stat-box alt-blue"><div class="stat-num" id="investCount">0</div><div class="stat-label">เคสหลอกลงทุน</div></div>
   </div>
+
+  <!-- Admin Pending Panel -->
+  <div class="section-title" id="pendingSectionTitle" style="display:none">⏳ รายการรออนุมัติ <span class="count-badge" id="pendingCount">0</span></div>
+  <div id="pendingContainer" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px"></div>
 
   <!-- List -->
   <div class="section-title">รายชื่อแบล็กลิสต์ <span class="count-badge" id="listCount">0</span></div>
@@ -353,13 +363,21 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const entriesCol = collection(db, 'entries');
 
+/* ===== Admin ===== */
+const ADMIN_EMAIL = 'ruok512345@gmail.com';
+function isAdmin() {
+  return !!currentUser && currentUser.email === ADMIN_EMAIL;
+}
+
 /* ===== State ===== */
-let allEntries = [];
+let allEntries = [];      // approved entries (public)
+let pendingEntries = [];  // pending entries (admin only)
 let currentFilter = 'all';
 let currentQuery = '';
 let editingId = null;
 let currentUser = null;
 let unsubscribe = null;
+let unsubscribePending = null;
 
 /* ===== Toast ===== */
 function toast(msg, type = 'success') {
@@ -423,10 +441,17 @@ function updateNavUI() {
 /* ===== Realtime Listener ===== */
 function startListening() {
   if (unsubscribe) unsubscribe();
+  if (unsubscribePending) { unsubscribePending(); unsubscribePending = null; }
+
   const q = query(entriesCol, orderBy('createdAt', 'desc'));
   unsubscribe = onSnapshot(q, snapshot => {
-    allEntries = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    const all = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    allEntries = all.filter(e => e.status === 'approved');
+    if (isAdmin()) {
+      pendingEntries = all.filter(e => e.status !== 'approved');
+    }
     renderList();
+    renderPending();
     updateStats();
   }, err => {
     console.error(err);
@@ -482,14 +507,87 @@ function renderList() {
       </div>
       <div class="entry-actions">
         <span class="tag ${tagClass(entry.tag)}">${escHtml(entry.tag)}</span>
-        <div class="entry-actions-row">
+        ${isAdmin() ? `<div class="entry-actions-row">
           <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${entry.id}">แก้ไข</button>
           <button class="btn btn-danger btn-sm" data-action="delete" data-id="${entry.id}">ลบ</button>
+        </div>` : ''}
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function renderPending() {
+  const section = document.getElementById('pendingSectionTitle');
+  const container = document.getElementById('pendingContainer');
+  if (!isAdmin()) {
+    section.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+  section.style.display = '';
+  document.getElementById('pendingCount').textContent = pendingEntries.length;
+
+  if (pendingEntries.length === 0) {
+    container.innerHTML = `<div class="empty-msg" style="padding:20px"><div>ไม่มีรายการรออนุมัติ</div></div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  pendingEntries.forEach(entry => {
+    const card = document.createElement('div');
+    card.className = 'entry-card pending-card';
+    const avClass = avatarClass(entry.name || '?');
+    const initial = (entry.name || '?').charAt(0);
+    card.innerHTML = `
+      <div class="entry-left">
+        <div class="avatar ${avClass}">${escHtml(initial)}</div>
+        <div class="entry-info">
+          <div class="entry-name">${escHtml(entry.name)}</div>
+          <div class="entry-meta">
+            ${entry.contact ? `<span>📌 ${escHtml(entry.contact)}</span>` : ''}
+            ${entry.reporter ? `<span>👤 แจ้งโดย ${escHtml(entry.reporter)}</span>` : ''}
+            ${entry.submittedBy ? `<span>✉️ ${escHtml(entry.submittedBy)}</span>` : ''}
+          </div>
+          ${entry.desc ? `<div class="entry-desc">${escHtml(entry.desc)}</div>` : ''}
+          ${entry.evidenceUrl ? `<div class="entry-date"><a href="${escHtml(entry.evidenceUrl)}" target="_blank" rel="noopener">ดูหลักฐานเพิ่มเติม ↗</a></div>` : ''}
+          <div class="entry-date">ส่งคำขอเมื่อ ${formatDate(entry.createdAt)}</div>
+        </div>
+      </div>
+      <div class="entry-actions">
+        <span class="status-badge">รออนุมัติ</span>
+        <div class="entry-actions-row">
+          <button class="btn btn-approve btn-sm" data-paction="approve" data-id="${entry.id}">✅ อนุมัติ</button>
+          <button class="btn btn-danger btn-sm" data-paction="reject" data-id="${entry.id}">✕ ปฏิเสธ</button>
         </div>
       </div>`;
     container.appendChild(card);
   });
 }
+
+document.getElementById('pendingContainer').addEventListener('click', async e => {
+  const btn = e.target.closest('button[data-paction]');
+  if (!btn) return;
+  if (!isAdmin()) return;
+  const id = btn.dataset.id;
+  const action = btn.dataset.paction;
+
+  try {
+    if (action === 'approve') {
+      await updateDoc(doc(db, 'entries', id), {
+        status: 'approved',
+        approvedAt: Timestamp.now(),
+        approvedBy: currentUser.email
+      });
+      toast('อนุมัติรายการเรียบร้อยแล้ว ✅');
+    } else if (action === 'reject') {
+      if (!confirm('ยืนยันการปฏิเสธ/ลบคำขอนี้?')) return;
+      await deleteDoc(doc(db, 'entries', id));
+      toast('ปฏิเสธคำขอเรียบร้อยแล้ว');
+    }
+  } catch (err) {
+    toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+  }
+});
 
 function updateStats() {
   const all = allEntries;
@@ -651,11 +749,18 @@ document.getElementById('entryForm').onsubmit = async e => {
 
   try {
     if (editingId) {
+      if (!isAdmin()) { toast('เฉพาะแอดมินเท่านั้นที่แก้ไขข้อมูลได้', 'error'); return; }
       await updateDoc(doc(db, 'entries', editingId), data);
       toast('แก้ไขข้อมูลเรียบร้อยแล้ว');
     } else {
-      await addDoc(entriesCol, { ...data, createdAt: Timestamp.now(), uid: currentUser.uid });
-      toast('บันทึกรายชื่อเรียบร้อยแล้ว');
+      await addDoc(entriesCol, {
+        ...data,
+        createdAt: Timestamp.now(),
+        uid: currentUser.uid,
+        status: 'pending',
+        submittedBy: currentUser.email
+      });
+      toast('ส่งคำขอเรียบร้อยแล้ว รอแอดมินตรวจสอบและอนุมัติ ⏳');
     }
     closeEntryModal();
   } catch (err) {
@@ -670,19 +775,17 @@ document.getElementById('listContainer').addEventListener('click', e => {
   const id = btn.dataset.id;
   const action = btn.dataset.action;
 
-  if (action === 'edit') {
-    requireAuth(() => openEntryModal(id));
-  } else if (action === 'delete') {
-    requireAuth(async () => {
+  requireAuth(() => {
+    if (!isAdmin()) { toast('เฉพาะแอดมินเท่านั้นที่ทำรายการนี้ได้', 'error'); return; }
+    if (action === 'edit') {
+      openEntryModal(id);
+    } else if (action === 'delete') {
       if (!confirm('ยืนยันการลบรายชื่อนี้?')) return;
-      try {
-        await deleteDoc(doc(db, 'entries', id));
-        toast('ลบรายชื่อเรียบร้อยแล้ว');
-      } catch (err) {
-        toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
-      }
-    });
-  }
+      deleteDoc(doc(db, 'entries', id))
+        .then(() => toast('ลบรายชื่อเรียบร้อยแล้ว'))
+        .catch(err => toast('เกิดข้อผิดพลาด: ' + err.message, 'error'));
+    }
+  });
 });
 
 /* ===== Add Entry Button ===== */
