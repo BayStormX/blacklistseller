@@ -111,6 +111,20 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 .btn-approve{background:var(--mint-500);color:#fff}
 .btn-approve:hover{background:var(--mint-600)}
 
+/* Inbox button with badge */
+.inbox-btn-wrap{position:relative;display:inline-flex}
+.inbox-badge{position:absolute;top:-7px;right:-7px;background:var(--coral-500);color:#fff;border-radius:var(--radius-pill);font-size:11px;font-weight:800;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid rgba(255,255,255,0.9);animation:badgePop .3s cubic-bezier(.36,.07,.19,.97) both;pointer-events:none}
+@keyframes badgePop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* Inbox modal */
+.inbox-modal-overlay{display:none;position:fixed;inset:0;background:rgba(4,52,44,.45);align-items:flex-start;justify-content:flex-end;z-index:1050;padding:70px 16px 16px}
+.inbox-modal-overlay.active{display:flex}
+.inbox-modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:520px;display:flex;flex-direction:column;box-shadow:var(--shadow-modal);max-height:calc(100vh - 90px);overflow:hidden;animation:slideDown .25s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+.inbox-modal-header{padding:16px 20px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.inbox-modal-header h3{font-size:17px;font-weight:800;color:var(--mint-700);display:flex;align-items:center;gap:8px}
+.inbox-modal-body{overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+
 /* Tags */
 .tag{font-size:12px;padding:4px 12px;border-radius:var(--radius-sm);white-space:nowrap;font-weight:700}
 .tag-no-delivery{background:var(--coral-100);color:var(--coral-700)}
@@ -182,6 +196,10 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
       <!-- ไม่ได้ login -->
       <button id="topbarLoginBtn" class="btn btn-light btn-sm">🔑 เข้าสู่ระบบ</button>
       <!-- login แล้ว -->
+      <div class="inbox-btn-wrap" id="inboxBtnWrap" style="display:none">
+        <button id="inboxBtn" class="btn btn-light btn-sm">📬 กล่องจดหมาย</button>
+        <span class="inbox-badge" id="inboxBadge" style="display:none">0</span>
+      </div>
       <div class="user-pill" id="userPill" style="display:none">👤 <span id="userDisplayName"></span></div>
       <button id="logoutBtn" class="btn btn-light btn-sm" style="display:none">ออกจากระบบ</button>
     </div>
@@ -217,9 +235,8 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
     <div class="stat-box alt-blue"><div class="stat-num" id="investCount">0</div><div class="stat-label">เคสหลอกลงทุน</div></div>
   </div>
 
-  <!-- Admin Pending Panel -->
-  <div class="section-title" id="pendingSectionTitle" style="display:none">⏳ รายการรออนุมัติ <span class="count-badge" id="pendingCount">0</span></div>
-  <div id="pendingContainer" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px"></div>
+  <!-- pendingContainer hidden (moved to inbox modal) -->
+  <div id="pendingContainer" style="display:none"></div>
 
   <!-- List -->
   <div class="section-title">รายชื่อแบล็กลิสต์ <span class="count-badge" id="listCount">0</span></div>
@@ -335,6 +352,19 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
   </div>
 </div>
 
+<!-- Inbox Modal (Admin Only) -->
+<div class="inbox-modal-overlay" id="inboxOverlay">
+  <div class="inbox-modal">
+    <div class="inbox-modal-header">
+      <h3>📬 กล่องจดหมาย <span class="count-badge" id="pendingCount" style="background:var(--amber-500);color:#fff">0</span></h3>
+      <button class="modal-close" id="inboxClose">✕</button>
+    </div>
+    <div class="inbox-modal-body" id="inboxBody">
+      <div class="empty-msg" style="padding:30px 20px"><span class="empty-icon">📭</span><div>ไม่มีรายการรออนุมัติ</div></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toastContainer"></div>
 
 <script type="module">
@@ -433,6 +463,7 @@ function updateNavUI() {
   document.getElementById('topbarLoginBtn').style.display = loggedIn ? 'none' : '';
   document.getElementById('userPill').style.display = loggedIn ? '' : 'none';
   document.getElementById('logoutBtn').style.display = loggedIn ? '' : 'none';
+  document.getElementById('inboxBtnWrap').style.display = (loggedIn && isAdmin()) ? '' : 'none';
   if (loggedIn) {
     document.getElementById('userDisplayName').textContent = currentUser.displayName || currentUser.email;
   }
@@ -517,22 +548,31 @@ function renderList() {
 }
 
 function renderPending() {
-  const section = document.getElementById('pendingSectionTitle');
-  const container = document.getElementById('pendingContainer');
-  if (!isAdmin()) {
-    section.style.display = 'none';
-    container.innerHTML = '';
+  if (!isAdmin()) return;
+
+  // Update badge count
+  const count = pendingEntries.length;
+  const badge = document.getElementById('inboxBadge');
+  const pendingCountEl = document.getElementById('pendingCount');
+  if (pendingCountEl) pendingCountEl.textContent = count;
+
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Render cards inside inbox modal body
+  const inboxBody = document.getElementById('inboxBody');
+  if (!inboxBody) return;
+
+  if (count === 0) {
+    inboxBody.innerHTML = `<div class="empty-msg" style="padding:30px 20px"><span class="empty-icon">📭</span><div>ไม่มีรายการรออนุมัติ</div></div>`;
     return;
   }
-  section.style.display = '';
-  document.getElementById('pendingCount').textContent = pendingEntries.length;
 
-  if (pendingEntries.length === 0) {
-    container.innerHTML = `<div class="empty-msg" style="padding:20px"><div>ไม่มีรายการรออนุมัติ</div></div>`;
-    return;
-  }
-
-  container.innerHTML = '';
+  inboxBody.innerHTML = '';
   pendingEntries.forEach(entry => {
     const card = document.createElement('div');
     card.className = 'entry-card pending-card';
@@ -560,11 +600,22 @@ function renderPending() {
           <button class="btn btn-danger btn-sm" data-paction="reject" data-id="${entry.id}">✕ ปฏิเสธ</button>
         </div>
       </div>`;
-    container.appendChild(card);
+    inboxBody.appendChild(card);
   });
 }
 
-document.getElementById('pendingContainer').addEventListener('click', async e => {
+/* ===== Inbox Modal Controls ===== */
+document.getElementById('inboxBtn').addEventListener('click', () => {
+  document.getElementById('inboxOverlay').classList.add('active');
+});
+document.getElementById('inboxClose').addEventListener('click', () => {
+  document.getElementById('inboxOverlay').classList.remove('active');
+});
+document.getElementById('inboxOverlay').addEventListener('click', e => {
+  if (e.target.id === 'inboxOverlay') document.getElementById('inboxOverlay').classList.remove('active');
+});
+
+document.getElementById('inboxBody').addEventListener('click', async e => {
   const btn = e.target.closest('button[data-paction]');
   if (!btn) return;
   if (!isAdmin()) return;
@@ -809,7 +860,7 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
 /* ===== Keyboard ESC ===== */
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  ['loginGateOverlay','registerOverlay','entryOverlay'].forEach(id => {
+  ['loginGateOverlay','registerOverlay','entryOverlay','inboxOverlay'].forEach(id => {
     document.getElementById(id).classList.remove('active');
   });
 });
