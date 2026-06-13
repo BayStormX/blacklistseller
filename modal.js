@@ -4,7 +4,7 @@
    =================================================== */
 
 const Modal = (() => {
-  let overlay, form, titleEl, editingId;
+  let overlay, form, titleEl, editingId, tempImage;
 
   function init() {
     overlay = document.getElementById('modalOverlay');
@@ -22,14 +22,34 @@ const Modal = (() => {
       if (e.key === 'Escape' && overlay.classList.contains('active')) close();
     });
 
+    const imageInput = document.getElementById('inputImage');
+    if (imageInput) {
+      imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          tempImage = ev.target.result;
+          const preview = document.getElementById('imagePreview');
+          if (preview) {
+            preview.src = tempImage;
+            preview.style.display = 'block';
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     form.addEventListener('submit', onSubmit);
   }
 
   function openForCreate() {
     editingId = null;
+    tempImage = null;
     titleEl.textContent = 'แจ้งแบล็กลิสต์';
     form.reset();
     clearErrors();
+    resetImagePreview();
     overlay.classList.add('active');
     document.getElementById('inputName').focus();
   }
@@ -38,6 +58,7 @@ const Modal = (() => {
     const entry = Storage.getById(id);
     if (!entry) return;
     editingId = id;
+    tempImage = entry.imageData || null;
     titleEl.textContent = 'แก้ไขข้อมูล';
     document.getElementById('inputName').value = entry.name;
     document.getElementById('inputContact').value = entry.contact;
@@ -46,7 +67,27 @@ const Modal = (() => {
     document.getElementById('inputEvidence').value = entry.evidenceUrl || '';
     document.getElementById('inputReporter').value = entry.reporter || '';
     clearErrors();
+    const preview = document.getElementById('imagePreview');
+    if (preview) {
+      if (entry.imageData) {
+        preview.src = entry.imageData;
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+        preview.src = '';
+      }
+    }
     overlay.classList.add('active');
+  }
+
+  function resetImagePreview() {
+    const preview = document.getElementById('imagePreview');
+    if (preview) {
+      preview.style.display = 'none';
+      preview.src = '';
+    }
+    const imageInput = document.getElementById('inputImage');
+    if (imageInput) imageInput.value = '';
   }
 
   function close() {
@@ -91,7 +132,8 @@ const Modal = (() => {
       tag: document.getElementById('inputTag').value,
       desc: document.getElementById('inputDesc').value.trim(),
       evidenceUrl: document.getElementById('inputEvidence').value.trim(),
-      reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุชื่อ'
+      reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุชื่อ',
+      imageData: tempImage || ''
     };
 
     if (editingId) {

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แจ้งแบล็กลิสต์ – Backlist เช็คก่อนโอน</title>
+<style>
+:root {
+  --mint-50: #EAFBF4; --mint-100: #DFF6EC; --mint-200: #BFEFDD;
+  --mint-300: #9FE1CB; --mint-400: #5DCAA5; --mint-500: #1D9E75;
+  --mint-600: #0F6E56; --mint-700: #085041; --mint-900: #04342C;
+  --coral-100: #FDEAE3; --coral-500: #D85A30; --coral-700: #993C1D;
+  --amber-100: #FAEEDA; --amber-500: #EF9F27; --amber-700: #854F0B;
+  --text-main: #04342C; --text-muted: #7a9a8f;
+  --bg-page: #EAFBF4; --bg-card: #ffffff;
+  --border-soft: #BFEFDD; --border-strong: #9FE1CB;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-pill: 999px;
+  --shadow-card: 0 2px 6px rgba(15,110,86,0.06);
+  --shadow-modal: 0 10px 40px rgba(4,52,44,0.18);
+  --font-base: 'Segoe UI','Noto Sans Thai','Sarabun',-apple-system,sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-base); background: var(--bg-page); color: var(--text-main); line-height: 1.6; min-height: 100vh; }
+button { font-family: inherit; cursor: pointer; }
+a { color: var(--mint-600); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Topbar */
+.topbar { background: linear-gradient(135deg, var(--mint-500), var(--mint-600)); color: #fff; padding: 14px 0; }
+.topbar-inner { max-width: 680px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: #fff; text-decoration: none; }
+.brand:hover { text-decoration: none; }
+.brand-icon { width: 36px; height: 36px; border-radius: var(--radius-md); background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.brand-tagline { font-size: 11px; font-weight: 400; opacity: .85; display: block; margin-top: 1px; }
+.btn-back { background: rgba(255,255,255,.18); color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: var(--radius-md); padding: 7px 14px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background .15s; text-decoration: none; }
+.btn-back:hover { background: rgba(255,255,255,.3); text-decoration: none; }
+
+/* Layout */
+.page-wrapper { max-width: 680px; margin: 0 auto; padding: 28px 16px 60px; }
+.page-title { font-size: 22px; font-weight: 800; color: var(--mint-700); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.page-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+.form-card { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); border: 1px solid var(--border-soft); padding: 28px 24px; }
+
+/* Section dividers */
+.section-divider { display: flex; align-items: center; gap: 10px; margin: 24px 0 14px; font-size: 13px; font-weight: 800; color: #fff; background: linear-gradient(135deg, var(--mint-500), var(--mint-600)); border-radius: var(--radius-md); padding: 9px 16px; }
+.section-divider:first-child { margin-top: 0; }
+.section-divider-alt { background: linear-gradient(135deg, var(--amber-500), #d47c00); }
+
+/* Warn boxes */
+.warn-box { background: #fff8e1; border: 1px solid var(--amber-500); border-radius: var(--radius-md); padding: 10px 14px; font-size: 12.5px; color: var(--amber-700); margin-bottom: 14px; line-height: 1.6; }
+.warn-box.red { background: #fff1f0; border-color: var(--coral-500); color: var(--coral-700); }
+
+/* Forms */
+input, select, textarea {
+  border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 10px 14px;
+  font-size: 14px; outline: none; background: #fff; color: var(--text-main); font-family: inherit;
+  transition: border-color .15s, box-shadow .15s; width: 100%;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--mint-500); box-shadow: 0 0 0 3px rgba(29,158,117,.15); }
+textarea { resize: vertical; min-height: 100px; }
+label { display: block; font-size: 13px; font-weight: 600; color: var(--mint-700); margin-bottom: 6px; }
+.form-group { margin-bottom: 16px; }
+.form-row { display: flex; gap: 12px; }
+.form-row .form-group { flex: 1; }
+.field-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+.field-error { font-size: 12px; color: var(--coral-500); margin-top: 4px; display: none; }
+.form-group.error input, .form-group.error textarea { border-color: var(--coral-500); }
+.form-group.error .field-error { display: block; }
+.required-star { color: var(--coral-500); font-weight: 800; }
+.hint-note { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+
+/* Bank rows */
+.bank-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 10px; }
+.bank-row .form-group { flex: 1; margin-bottom: 0; }
+.btn-add-bank { background: var(--mint-500); color: #fff; border: none; border-radius: var(--radius-md); padding: 10px 16px; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; height: 42px; margin-top: 26px; }
+.btn-add-bank:hover { background: var(--mint-600); }
+
+/* Upload zones */
+.upload-zone {
+  border: 2px dashed var(--border-strong); border-radius: var(--radius-md);
+  padding: 24px 16px; text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s; background: var(--mint-50);
+}
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--mint-500); background: var(--mint-100); }
+.upload-zone-icon { font-size: 32px; margin-bottom: 6px; }
+.upload-zone-text { font-size: 14px; font-weight: 600; color: var(--mint-700); }
+.upload-zone-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* Compact small upload zone */
+.upload-zone-sm {
+  border: 2px dashed var(--border-strong); border-radius: var(--radius-md);
+  padding: 14px; text-align: left; cursor: pointer;
+  transition: border-color .2s, background .2s; background: var(--mint-50);
+  display: flex; align-items: center; gap: 10px;
+}
+.upload-zone-sm:hover, .upload-zone-sm.dragover { border-color: var(--mint-500); background: var(--mint-100); }
+.upload-zone-sm .upload-zone-icon { font-size: 22px; margin-bottom: 0; flex-shrink: 0; }
+.upload-zone-sm .upload-zone-text { font-size: 13px; }
+.upload-zone-sm .upload-zone-hint { margin-top: 1px; }
+
+/* Preview grid */
+.preview-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.preview-item {
+  position: relative; width: 90px; height: 90px; border-radius: var(--radius-sm);
+  overflow: hidden; border: 2px solid var(--border-soft);
+}
+.preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.preview-item .remove-btn {
+  position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,.55);
+  color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px;
+  font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.preview-item .remove-btn:hover { background: var(--coral-500); }
+.preview-item .upload-progress {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+  background: rgba(0,0,0,.2);
+}
+.preview-item .upload-bar {
+  height: 100%; background: var(--mint-500); width: 0%; transition: width .3s;
+}
+.upload-count { font-size: 12px; color: var(--mint-600); font-weight: 700; margin-top: 6px; }
+
+.preview-item-sm { width: 56px; height: 56px; }
+
+/* Buttons */
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 28px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: var(--radius-md); padding: 11px 22px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--mint-500); color: #fff; }
+.btn-primary:hover { background: var(--mint-600); }
+.btn-secondary { background: #fff; color: var(--mint-600); border: 1px solid var(--border-strong); }
+.btn-secondary:hover { background: var(--mint-100); }
+.btn-primary.loading { opacity: .7; pointer-events: none; }
+
+/* Toast */
+.toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 1100; }
+.toast { background: var(--mint-600); color: #fff; padding: 12px 18px; border-radius: var(--radius-md); font-size: 14px; box-shadow: var(--shadow-modal); animation: fadeInUp .3s ease; display: flex; align-items: center; gap: 8px; max-width: 320px; }
+.toast.toast-error { background: var(--coral-500); }
+
+/* Loading overlay */
+.loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,.8); display: flex; align-items: center; justify-content: center; z-index: 2000; flex-direction: column; gap: 12px; font-size: 14px; color: var(--mint-600); font-weight: 600; }
+.spinner { width: 36px; height: 36px; border: 4px solid var(--mint-200); border-top-color: var(--mint-500); border-radius: 50%; animation: spin .8s linear infinite; }
+.spinner-inline { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px; }
+
+/* Upload overlay */
+.upload-overlay { position: fixed; inset: 0; background: rgba(4,52,44,.6); display: none; align-items: center; justify-content: center; z-index: 3000; flex-direction: column; gap: 16px; color: #fff; font-size: 15px; font-weight: 700; }
+.upload-overlay.show { display: flex; }
+.upload-overlay .spinner { border-color: rgba(255,255,255,.3); border-top-color: #fff; }
+.upload-progress-text { font-size: 13px; opacity: .85; }
+
+/* Success state */
+.success-screen { display: none; text-align: center; padding: 40px 20px; }
+.success-screen.show { display: block; }
+.success-icon { font-size: 56px; margin-bottom: 16px; }
+.success-title { font-size: 22px; font-weight: 800; color: var(--mint-600); margin-bottom: 8px; }
+.success-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+
+/* Login notice */
+.login-notice { background: var(--mint-100); border: 1px solid var(--mint-300); border-radius: var(--radius-md); padding: 12px 16px; font-size: 13px; color: var(--mint-700); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.login-notice a { color: var(--mint-600); font-weight: 700; }
+
+/* Footer */
+.site-footer { text-align: center; font-size: 12px; color: var(--text-muted); padding: 24px 0 10px; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 520px) {
+  .form-row { flex-direction: column; gap: 0; }
+  .form-card { padding: 20px 16px; }
+  .page-title { font-size: 18px; }
+  .preview-item { width: 75px; height: 75px; }
+}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div>กำลังโหลด...</div>
+</div>
+
+<!-- Upload progress overlay -->
+<div class="upload-overlay" id="uploadOverlay">
+  <div class="spinner"></div>
+  <div>กำลังอัปโหลดรูปภาพ...</div>
+  <div class="upload-progress-text" id="uploadProgressText">0 / 0</div>
+</div>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div>
+        Backlist เช็คก่อนโอน
+        <span class="brand-tagline">รวบรวมรายชื่อที่ถูกแจ้งว่าฉ้อโกง</span>
+      </div>
+    </a>
+    <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+  </div>
+</header>
+
+<div class="page-wrapper">
+
+  <div class="page-title">📋 แจ้งแบล็กลิสต์</div>
+  <p class="page-subtitle">กรอกข้อมูลให้ครบถ้วนเพื่อให้แอดมินตรวจสอบและอนุมัติได้รวดเร็ว</p>
+
+  <div class="login-notice" id="loginNotice" style="display:none">
+    🔑 คุณยังไม่ได้เข้าสู่ระบบ — <a href="index.html">กลับหน้าหลัก</a> แล้วเข้าสู่ระบบก่อนส่งข้อมูล
+  </div>
+
+  <!-- Success screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">ส่งคำขอเรียบร้อยแล้ว!</div>
+    <p class="success-sub">ขอบคุณที่แจ้งข้อมูลนะครับ<br>แอดมินจะตรวจสอบและอนุมัติรายการของคุณในเร็วๆ นี้ ⏳</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="resetForm()">📋 แจ้งรายการใหม่</button>
+      <a href="index.html" class="btn btn-secondary">← กลับหน้าหลัก</a>
+    </div>
+  </div>
+
+  <!-- Form card -->
+  <div class="form-card" id="formCard">
+    <form id="entryForm">
+
+      <!-- ส่วน 1: ข้อมูลผู้ขาย -->
+      <div class="section-divider">👤 ข้อมูลผู้ขาย</div>
+      <div class="warn-box">
+        เพื่อป้องกันผู้บริสุทธิ์เสียหาย หากไม่แน่ใจให้ใส่ว่า "ไม่ทราบ"<br>
+        🔴 ใส่ชื่อตามบัญชีที่โอนเงินไปเท่านั้น ไม่ใช่ชื่อเพจ หรือชื่อประชาชนที่ถูกอ้าง
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ชื่อคนขาย (ภาษาไทย) <span class="required-star">*</span></label>
+          <input type="text" id="inputName" placeholder="ชื่อบัญชีคนขาย (ไม่ต้องมีนาง นางสาว)" autocomplete="off">
+          <div class="field-error">กรุณากรอกข้อมูลในช่องนี้</div>
+        </div>
+        <div class="form-group">
+          <label>นามสกุล (ภาษาไทย)</label>
+          <input type="text" id="inputLastname" placeholder="นามสกุลบัญชีคนขาย">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>เลขบัตรประชาชนคนขาย</label>
+        <input type="text" id="inputNationalId" placeholder="ไม่รู้ไม่ต้องใส่" maxlength="13">
+        <div class="field-hint">ใส่เฉพาะตัวเลข 13 หลัก หากไม่ทราบให้เว้นว่าง</div>
+      </div>
+
+      <!-- ส่วน 2: ข้อมูลบัญชีธนาคาร -->
+      <div class="section-divider section-divider-alt">🏦 ข้อมูลบัญชีธนาคาร</div>
+      <div class="hint-note" style="margin-bottom:10px">บัญชีธนาคารคนขาย • หากไม่รู้เลขบัญชี ให้กรอก 0000000</div>
+      <div id="bankRows">
+        <div class="bank-row">
+          <div class="form-group">
+            <label>บัญชีคนขาย <span class="required-star">*</span></label>
+            <input type="text" id="inputContact" placeholder="ตัวเลขเท่านั้น">
+          </div>
+          <div class="form-group">
+            <label>เลือกธนาคาร <span class="required-star">*</span></label>
+            <select id="inputBank">
+              <option value="">เลือกธนาคาร</option>
+              <option>ธ.กรุงเทพ (BBL)</option>
+              <option>ธ.กสิกรไทย (KBANK)</option>
+              <option>ธ.กรุงไทย (KTB)</option>
+              <option>ธ.ทหารไทยธนชาต (TTB)</option>
+              <option>ธ.ไทยพาณิชย์ (SCB)</option>
+              <option>ธ.กรุงศรีอยุธยา (BAY)</option>
+              <option>ธ.ออมสิน</option>
+              <option>ธ.อาคารสงเคราะห์ (GHB)</option>
+              <option>ธ.เพื่อการเกษตร (ธ.ก.ส.)</option>
+              <option>ธ.ซีไอเอ็มบีไทย</option>
+              <option>พร้อมเพย์ / PromptPay</option>
+              <option>อื่นๆ</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn-add-bank" id="addBankBtn">+ เพิ่มบัญชี</button>
+
+      <!-- ส่วน 3: รายละเอียดเรื่องราว -->
+      <div class="section-divider" style="margin-top:24px">📦 รายละเอียดเรื่องราว</div>
+      <div class="warn-box red">
+        ❌ ไม่รับรายงานเกี่ยวกับ แชร์ ยืมเงิน/ออมเงิน ยกเว้นตามเงื่อนไข <a href="#" style="color:var(--coral-700);font-weight:700">เงื่อนไข</a>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>สินค้าที่สั่งซื้อ <span class="required-star">*</span></label>
+          <input type="text" id="inputProduct" placeholder="สินค้า">
+        </div>
+        <div class="form-group">
+          <label>ยอดโอน (บาท) <span class="required-star">*</span></label>
+          <input type="number" id="inputAmount" placeholder="ยอดโอนตามในสลิป" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>วันโอนเงิน <span class="required-star">*</span></label>
+        <input type="date" id="inputTransferDate">
+      </div>
+      <div class="form-group">
+        <label>เพจขายของ <span class="required-star">*</span></label>
+        <input type="text" id="inputReporter" placeholder="ชื่อเพจ FB, IG, LINE">
+        <div class="field-hint">เช่น FB: Sneaker Shoes ราคาถูก หรือชื่อเพจคนขาย</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ประเภทการโกง</label>
+          <select id="inputTag">
+            <option>ไม่ส่งของ</option>
+            <option>หลอกโอนเงิน</option>
+            <option>ของไม่ตรงปก</option>
+            <option>หลอกลงทุน</option>
+            <option>อื่นๆ</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>จังหวัดของผู้แจ้ง</label>
+          <input type="text" id="inputProvince" placeholder="ไม่ระบุ">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>รายละเอียดเพิ่มเติม <span class="required-star">*</span></label>
+        <div class="hint-note" style="margin-bottom:6px">บรรยายการโกงให้ละเอียด เช่น คนขายมีพฤติกรรมอย่างไร พร้อมใส่ชื่อและลิงก์เพจขายของ FB, LINE, IG</div>
+        <textarea id="inputDesc" rows="5" placeholder="อธิบายเหตุการณ์ที่เกิดขึ้น เช่น วันที่ จำนวนเงิน ลิงก์เพจ"></textarea>
+        <div class="field-error">กรุณากรอกรายละเอียดเหตุการณ์</div>
+      </div>
+
+      <!-- ส่วน 4: หลักฐานรูปภาพ -->
+      <div class="section-divider section-divider-alt">🖼️ หลักฐานรูปภาพ</div>
+      <div class="hint-note" style="margin-bottom:12px">
+        ⭐ แนบหลักฐานอย่างน้อย 5 รูป เลือกหลายรูปได้ในครั้งเดียว<br>
+        🔴 แชทไม่ครบ แชทไม่เรียง หรือรูปไม่ชัด โดนลบรายงานทิ้งทันที
+      </div>
+
+      <!-- Upload: หลักฐาน (หลายรูป) -->
+      <div class="form-group">
+        <label>อัปโหลดรูปหลักฐาน (เลือกได้หลายรูป)</label>
+        <div class="upload-zone-sm" id="evidenceZone">
+          <div class="upload-zone-icon">📂</div>
+          <div>
+            <div class="upload-zone-text">คลิกหรือลากรูปมาวางที่นี่</div>
+            <div class="upload-zone-hint">JPG, PNG, WEBP • สูงสุด 10 MB ต่อรูป</div>
+          </div>
+        </div>
+        <input type="file" id="evidenceFiles" accept="image/*" multiple style="display:none">
+        <div class="preview-grid" id="evidencePreview"></div>
+        <div class="upload-count" id="evidenceCount"></div>
+        <div class="form-group" style="margin-top:10px;margin-bottom:0">
+          <label>รายละเอียดรูป (ไม่บังคับ)</label>
+          <textarea id="evidenceNote" rows="2" placeholder="อธิบายเพิ่มเติมเกี่ยวกับรูปหลักฐาน เช่น แชทตอนไหน วันที่ใด (ถ้ามี)"></textarea>
+        </div>
+      </div>
+
+      <!-- Upload: สลิป (รูปเดียว) -->
+      <div class="form-group">
+        <label>อัปโหลดสลิปโอนเงิน</label>
+        <div class="upload-zone-sm" id="slipZone">
+          <div class="upload-zone-icon">🧾</div>
+          <div>
+            <div class="upload-zone-text">คลิกหรือลากสลิปมาวางที่นี่</div>
+            <div class="upload-zone-hint">JPG, PNG • ไม่ต้องปิดชื่อหรือ QR</div>
+          </div>
+        </div>
+        <input type="file" id="slipFile" accept="image/*" style="display:none">
+        <div class="preview-grid" id="slipPreview"></div>
+        <div class="form-group" style="margin-top:10px;margin-bottom:0">
+          <label>รายละเอียดสลิป (ไม่บังคับ)</label>
+          <textarea id="slipNote" rows="2" placeholder="หมายเหตุเกี่ยวกับสลิป เช่น โอนวันไหน เวลาใด (ถ้ามี)"></textarea>
+        </div>
+      </div>
+
+      <!-- ส่วน 5: ข้อมูลติดต่อกลับ -->
+      <div class="section-divider">📞 ข้อมูลติดต่อกลับ (ไม่บังคับ)</div>
+      <div class="hint-note" style="margin-bottom:10px">เพื่อประโยชน์ของคุณเอง ใส่รายละเอียดการติดต่อกลับ (โดยจะมีทันทีในระบบหลังบ้าน ไม่เผยแพร่สู่สาธารณะ)</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>อีเมลของฉัน</label>
+          <input type="email" id="inputEmail" placeholder="my_mail@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>เบอร์มือถือ</label>
+          <input type="tel" id="inputPhone" placeholder="0891234567">
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <a href="index.html" class="btn btn-secondary">ยกเลิก</a>
+        <button type="submit" class="btn btn-primary" id="submitBtn">💾 ส่งคำร้อง</button>
+      </div>
+
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    ⚠️ ข้อมูลในเว็บนี้มาจากการแจ้งของผู้ใช้ กรุณาตรวจสอบข้อมูลเพิ่มเติมก่อนตัดสินใจ
+  </footer>
+
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBNTSreowniTxRkXIxEji4NpI6SaVYioSk",
+  authDomain: "blacklistseller-5b16f.firebaseapp.com",
+  projectId: "blacklistseller-5b16f",
+  storageBucket: "blacklistseller-5b16f.firebasestorage.app",
+  messagingSenderId: "763345140697",
+  appId: "1:763345140697:web:cdc698f644a8196da4f7c8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const entriesCol = collection(db, 'entries');
+
+let currentUser = null;
+// File lists
+let evidenceFileList = [];
+let slipFileList = [];
+
+/* ===== Toast ===== */
+function toast(msg, type = 'success') {
+  const el = document.createElement('div');
+  el.className = 'toast' + (type === 'error' ? ' toast-error' : '');
+  el.textContent = msg;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3500);
+}
+
+/* ===== Auth ===== */
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  document.getElementById('loadingOverlay').style.display = 'none';
+  if (!user) {
+    document.getElementById('loginNotice').style.display = 'flex';
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').style.opacity = '0.5';
+  }
+});
+
+/* ===== Upload zone helpers ===== */
+function setupZone(zoneId, inputId, previewId, countId, multi) {
+  const zone = document.getElementById(zoneId);
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  const countEl = countId ? document.getElementById(countId) : null;
+  const fileList = zoneId === 'evidenceZone' ? evidenceFileList : slipFileList;
+
+  // Click to open file picker
+  zone.addEventListener('click', () => input.click());
+
+  // Drag & drop
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    handleFiles(Array.from(e.dataTransfer.files), fileList, preview, countEl, multi);
+  });
+
+  input.addEventListener('change', () => {
+    handleFiles(Array.from(input.files), fileList, preview, countEl, multi);
+    input.value = '';
+  });
+}
+
+function handleFiles(files, fileList, preview, countEl, multi) {
+  const allowed = files.filter(f => f.type.startsWith('image/'));
+  if (allowed.length !== files.length) toast('เฉพาะไฟล์รูปภาพเท่านั้น (JPG, PNG, WEBP)', 'error');
+
+  if (!multi) {
+    // Replace single file
+    fileList.length = 0;
+    preview.innerHTML = '';
+  }
+
+  allowed.forEach(file => {
+    if (file.size > 10 * 1024 * 1024) { toast(`${file.name} ขนาดเกิน 10MB`, 'error'); return; }
+    if (!multi && fileList.length >= 1) return; // single only
+    fileList.push(file);
+    addPreview(file, fileList, preview, countEl);
+  });
+
+  if (countEl) countEl.textContent = fileList.length > 0 ? `เลือกแล้ว ${fileList.length} รูป` : '';
+}
+
+function addPreview(file, fileList, preview, countEl) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const item = document.createElement('div');
+    item.className = 'preview-item preview-item-sm';
+    item.innerHTML = `
+      <img src="${e.target.result}" alt="preview">
+      <button type="button" class="remove-btn" title="ลบรูปนี้">✕</button>
+      <div class="upload-progress"><div class="upload-bar"></div></div>`;
+    item.querySelector('.remove-btn').addEventListener('click', () => {
+      const idx = fileList.indexOf(file);
+      if (idx > -1) fileList.splice(idx, 1);
+      item.remove();
+      if (countEl) countEl.textContent = fileList.length > 0 ? `เลือกแล้ว ${fileList.length} รูป` : '';
+    });
+    preview.appendChild(item);
+  };
+  reader.readAsDataURL(file);
+}
+
+setupZone('evidenceZone', 'evidenceFiles', 'evidencePreview', 'evidenceCount', true);
+setupZone('slipZone', 'slipFile', 'slipPreview', null, false);
+
+/* ===== Upload file to Storage ===== */
+function uploadFile(file, path) {
+  return new Promise((resolve, reject) => {
+    const storageRef = ref(storage, path);
+    const task = uploadBytesResumable(storageRef, file);
+    task.on('state_changed', null, reject, () => getDownloadURL(task.snapshot.ref).then(resolve).catch(reject));
+  });
+}
+
+/* ===== Add bank row ===== */
+document.getElementById('addBankBtn').addEventListener('click', () => {
+  const row = document.createElement('div');
+  row.className = 'bank-row';
+  row.innerHTML = `
+    <div class="form-group">
+      <label>บัญชีเพิ่มเติม</label>
+      <input type="text" placeholder="ตัวเลขเท่านั้น">
+    </div>
+    <div class="form-group">
+      <label>เลือกธนาคาร</label>
+      <select>
+        <option value="">เลือกธนาคาร</option>
+        <option>ธ.กรุงเทพ (BBL)</option><option>ธ.กสิกรไทย (KBANK)</option>
+        <option>ธ.กรุงไทย (KTB)</option><option>ธ.ทหารไทยธนชาต (TTB)</option>
+        <option>ธ.ไทยพาณิชย์ (SCB)</option><option>ธ.กรุงศรีอยุธยา (BAY)</option>
+        <option>ธ.ออมสิน</option><option>พร้อมเพย์ / PromptPay</option><option>อื่นๆ</option>
+      </select>
+    </div>
+    <button type="button" onclick="this.closest('.bank-row').remove()"
+      style="background:var(--coral-100);color:var(--coral-700);border:none;border-radius:var(--radius-md);
+             padding:0 10px;font-size:18px;cursor:pointer;margin-top:24px;height:42px;flex-shrink:0">✕</button>`;
+  document.getElementById('bankRows').appendChild(row);
+});
+
+/* ===== Form submit ===== */
+document.getElementById('entryForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!currentUser) { toast('กรุณาเข้าสู่ระบบก่อนส่งข้อมูล', 'error'); return; }
+
+  // Validate
+  let valid = true;
+  const name = document.getElementById('inputName').value.trim();
+  const desc = document.getElementById('inputDesc').value.trim();
+  document.querySelectorAll('.form-group.error').forEach(g => g.classList.remove('error'));
+  if (!name) { document.getElementById('inputName').closest('.form-group').classList.add('error'); valid = false; }
+  if (!desc) { document.getElementById('inputDesc').closest('.form-group').classList.add('error'); valid = false; }
+  if (!valid) { toast('กรุณากรอกข้อมูลที่จำเป็นให้ครบ', 'error'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+
+  // Show upload overlay
+  const uploadOverlay = document.getElementById('uploadOverlay');
+  const progressText = document.getElementById('uploadProgressText');
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.classList.add('loading');
+  submitBtn.innerHTML = '<span class="spinner-inline"></span>กำลังส่ง...';
+
+  // Upload images
+  const ts = Date.now();
+  let evidenceUrls = [];
+  let slipUrl = '';
+
+  const totalFiles = evidenceFileList.length + slipFileList.length;
+
+  if (totalFiles > 0) {
+    uploadOverlay.classList.add('show');
+    let done = 0;
+
+    // Upload evidence images
+    for (let i = 0; i < evidenceFileList.length; i++) {
+      const file = evidenceFileList[i];
+      const ext = file.name.split('.').pop();
+      try {
+        const url = await uploadFile(file, `evidence/${currentUser.uid}/${ts}_ev${i}.${ext}`);
+        evidenceUrls.push(url);
+      } catch (err) {
+        toast(`อัปโหลดรูปหลักฐานที่ ${i+1} ล้มเหลว`, 'error');
+      }
+      done++;
+      progressText.textContent = `${done} / ${totalFiles} รูป`;
+    }
+
+    // Upload slip
+    if (slipFileList.length > 0) {
+      const file = slipFileList[0];
+      const ext = file.name.split('.').pop();
+      try {
+        slipUrl = await uploadFile(file, `slips/${currentUser.uid}/${ts}_slip.${ext}`);
+      } catch (err) {
+        toast('อัปโหลดสลิปล้มเหลว', 'error');
+      }
+      done++;
+      progressText.textContent = `${done} / ${totalFiles} รูป`;
+    }
+
+    uploadOverlay.classList.remove('show');
+  }
+
+  // Save to Firestore
+  const data = {
+    name,
+    lastname: document.getElementById('inputLastname').value.trim(),
+    nationalId: document.getElementById('inputNationalId').value.trim(),
+    contact: document.getElementById('inputContact').value.trim(),
+    bank: document.getElementById('inputBank').value,
+    product: document.getElementById('inputProduct').value.trim(),
+    amount: document.getElementById('inputAmount').value.trim(),
+    transferDate: document.getElementById('inputTransferDate').value,
+    tag: document.getElementById('inputTag').value,
+    reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุ',
+    province: document.getElementById('inputProvince').value.trim(),
+    desc,
+    evidenceUrls,
+    evidenceUrl: evidenceUrls[0] || '',
+    slipUrl,
+    contactEmail: document.getElementById('inputEmail').value.trim(),
+    contactPhone: document.getElementById('inputPhone').value.trim(),
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
+    uid: currentUser.uid,
+    status: 'pending',
+    submittedBy: currentUser.email
+  };
+
+  try {
+    await addDoc(entriesCol, data);
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (err) {
+    toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+    submitBtn.classList.remove('loading');
+    submitBtn.innerHTML = '💾 ส่งคำร้อง';
+  }
+});
+
+/* ===== Reset form ===== */
+window.resetForm = function () {
+  document.getElementById('entryForm').reset();
+  document.getElementById('formCard').style.display = '';
+  document.getElementById('successScreen').classList.remove('show');
+  document.getElementById('evidencePreview').innerHTML = '';
+  document.getElementById('slipPreview').innerHTML = '';
+  document.getElementById('evidenceCount').textContent = '';
+  evidenceFileList.length = 0;
+  slipFileList.length = 0;
+  const rows = document.querySelectorAll('#bankRows .bank-row');
+  rows.forEach((r, i) => { if (i > 0) r.remove(); });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+</script>
+
+</body>
+</html>

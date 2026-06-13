@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รายละเอียด – Backlist เช็คก่อนโอน</title>
+<style>
+:root {
+  --mint-50: #EAFBF4; --mint-100: #DFF6EC; --mint-200: #BFEFDD;
+  --mint-300: #9FE1CB; --mint-400: #5DCAA5; --mint-500: #1D9E75;
+  --mint-600: #0F6E56; --mint-700: #085041; --mint-900: #04342C;
+  --coral-100: #FDEAE3; --coral-500: #D85A30; --coral-700: #993C1D;
+  --pink-100: #FBEAF0; --pink-500: #D4537E; --pink-700: #993556;
+  --blue-100: #E6F1FB; --blue-500: #378ADD; --blue-700: #0C447C;
+  --amber-100: #FAEEDA; --amber-500: #EF9F27; --amber-700: #854F0B;
+  --text-main: #04342C; --text-muted: #7a9a8f;
+  --bg-page: #EAFBF4; --bg-card: #ffffff;
+  --border-soft: #BFEFDD; --border-strong: #9FE1CB;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-pill: 999px;
+  --shadow-card: 0 2px 6px rgba(15,110,86,0.06);
+  --shadow-modal: 0 10px 40px rgba(4,52,44,0.18);
+  --font-base: 'Segoe UI','Noto Sans Thai','Sarabun',-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-base);background:var(--bg-page);color:var(--text-main);line-height:1.6;min-height:100vh}
+button,a{font-family:inherit;cursor:pointer}
+a{color:var(--mint-600);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Topbar */
+.topbar{background:linear-gradient(135deg,var(--mint-500),var(--mint-600));color:#fff;padding:14px 0;margin-bottom:28px}
+.topbar-inner{max-width:780px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;color:#fff;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:18px}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:var(--radius-md);padding:7px 14px;font-size:13px;font-weight:600;color:#fff;text-decoration:none;transition:background .15s}
+.btn-back:hover{background:rgba(255,255,255,.3);text-decoration:none}
+
+/* Page */
+.page-wrapper{max-width:780px;margin:0 auto;padding:0 16px 60px}
+
+/* Loading */
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;z-index:200;flex-direction:column;gap:12px;font-size:14px;color:var(--mint-600);font-weight:600}
+.spinner{width:32px;height:32px;border:4px solid var(--mint-200);border-top-color:var(--mint-500);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Report ID bar */
+.report-id-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.report-id-label{font-size:13px;font-weight:700;background:var(--mint-100);color:var(--mint-700);border-radius:var(--radius-pill);padding:5px 14px;display:inline-flex;align-items:center;gap:6px}
+.report-date{font-size:12px;color:var(--text-muted)}
+
+/* Hero card */
+.hero-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-card);display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;animation:fadeInUp .3s ease}
+.hero-avatar{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;flex-shrink:0}
+.av-coral{background:var(--coral-500)} .av-blue{background:var(--blue-500)} .av-amber{background:var(--amber-500)}
+.av-pink{background:var(--pink-500)} .av-mint{background:var(--mint-500)} .av-purple{background:#7F77DD}
+.hero-info{flex:1;min-width:0}
+.hero-name{font-size:22px;font-weight:800;color:var(--text-main);margin-bottom:6px;word-break:break-word}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tag{font-size:12px;padding:4px 12px;border-radius:var(--radius-sm);white-space:nowrap;font-weight:700}
+.tag-no-delivery{background:var(--coral-100);color:var(--coral-700)}
+.tag-scam-transfer{background:var(--pink-100);color:var(--pink-700)}
+.tag-not-as-described{background:var(--amber-100);color:var(--amber-700)}
+.tag-investment-scam{background:#EEEDFE;color:#3C3489}
+.tag-other{background:var(--mint-100);color:var(--mint-600)}
+.report-count-pill{background:#FEE2D5;color:#7A2B0E;border-radius:var(--radius-pill);font-size:12px;font-weight:700;padding:4px 12px;display:inline-flex;align-items:center;gap:4px}
+.amount-pill{background:#FFF3D6;color:#8A5700;border-radius:var(--radius-pill);font-size:12px;font-weight:700;padding:4px 12px;display:inline-flex;align-items:center;gap:4px}
+
+/* Section cards */
+.section-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-card);margin-bottom:14px;animation:fadeInUp .3s ease}
+.section-head{font-size:13px;font-weight:800;color:var(--mint-600);text-transform:uppercase;letter-spacing:.4px;margin-bottom:14px;display:flex;align-items:center;gap:7px;padding-bottom:10px;border-bottom:1px solid var(--border-soft)}
+.field-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px 20px}
+.field-item{display:flex;flex-direction:column;gap:2px}
+.field-label{font-size:11.5px;color:var(--text-muted);font-weight:600}
+.field-value{font-size:14px;color:var(--text-main);font-weight:600;word-break:break-word}
+.field-value.redacted{font-family:monospace;background:var(--border-soft);border-radius:var(--radius-sm);padding:2px 8px;color:var(--text-muted);font-size:12px;letter-spacing:2px;cursor:default;user-select:none}
+.field-value.highlight{color:var(--coral-700)}
+.desc-block{font-size:13.5px;color:#2c4a40;line-height:1.75;background:var(--mint-50);border-radius:var(--radius-md);padding:14px;border:1px solid var(--border-soft)}
+
+/* Private notice */
+.private-notice{display:inline-flex;align-items:center;gap:6px;background:var(--amber-100);color:var(--amber-700);font-size:12px;font-weight:700;border-radius:var(--radius-pill);padding:4px 12px}
+
+/* Evidence button */
+.btn-evidence{display:inline-flex;align-items:center;gap:7px;background:var(--mint-500);color:#fff;border-radius:var(--radius-md);padding:10px 18px;font-size:14px;font-weight:700;text-decoration:none;transition:background .15s}
+.btn-evidence:hover{background:var(--mint-600);text-decoration:none}
+
+/* Warning box */
+.warn-box{background:#fff8e1;border:1px solid var(--amber-500);border-left:4px solid var(--amber-500);border-radius:var(--radius-md);padding:12px 16px;font-size:12.5px;color:var(--amber-700);margin-bottom:20px;line-height:1.6}
+
+/* Not found */
+.not-found{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.not-found .icon{font-size:48px;margin-bottom:12px}
+
+/* Reveal toggle */
+.btn-reveal{background:none;border:1px solid var(--border-strong);border-radius:var(--radius-sm);padding:3px 10px;font-size:12px;color:var(--mint-600);font-weight:600;cursor:pointer;margin-left:6px;vertical-align:middle;transition:all .15s}
+.btn-reveal:hover{background:var(--mint-100)}
+
+/* Toast */
+.toast-container{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:1100}
+.toast{background:var(--mint-600);color:#fff;padding:10px 16px;border-radius:var(--radius-md);font-size:13px;box-shadow:var(--shadow-modal);animation:fadeInUp .3s ease}
+.toast.toast-error{background:var(--coral-500)}
+
+@media(max-width:600px){
+  .hero-card{flex-direction:column;align-items:center;text-align:center}
+  .hero-badges{justify-content:center}
+  .field-grid{grid-template-columns:1fr 1fr}
+  .topbar-inner{flex-direction:row}
+}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div>กำลังโหลดข้อมูล...</div>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🛡️</div>
+      Backlist เช็คก่อนโอน
+    </a>
+    <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+  </div>
+</header>
+
+<div class="page-wrapper" id="pageWrapper" style="display:none">
+
+  <div class="warn-box">
+    ⚠️ ข้อมูลนี้มาจากการรายงานของผู้ใช้งาน ยังไม่ผ่านการพิสูจน์ทางกฎหมาย
+    กรุณาตรวจสอบข้อมูลเพิ่มเติมก่อนตัดสินใจ และไม่ควรนำไปใช้กล่าวโทษบุคคลโดยไม่มีหลักฐาน
+  </div>
+
+  <div class="report-id-bar">
+    <span class="report-id-label">🔖 เลขรายงาน: <span id="reportId">–</span></span>
+    <span class="report-date" id="reportDate"></span>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero-card">
+    <div class="hero-avatar" id="heroAvatar">?</div>
+    <div class="hero-info">
+      <div class="hero-name" id="heroName">–</div>
+      <div class="hero-badges" id="heroBadges"></div>
+    </div>
+  </div>
+
+  <!-- ข้อมูลรายงาน -->
+  <div class="section-card">
+    <div class="section-head">📋 ข้อมูลหลัก</div>
+    <div class="field-grid" id="mainFields"></div>
+  </div>
+
+  <!-- รายละเอียดเหตุการณ์ -->
+  <div class="section-card" id="descCard" style="display:none">
+    <div class="section-head">📝 รายละเอียดเหตุการณ์</div>
+    <div class="desc-block" id="descBlock"></div>
+  </div>
+
+  <!-- หลักฐาน -->
+  <div class="section-card" id="evidenceCard" style="display:none">
+    <div class="section-head">🖼️ หลักฐานที่แนบ</div>
+    <div id="evidenceBlock"></div>
+  </div>
+
+  <!-- ข้อมูลส่วนตัวของผู้รายงาน (ถูกปิด) -->
+  <div class="section-card">
+    <div class="section-head">🔒 ข้อมูลส่วนตัว (ถูกปิดเพื่อความเป็นส่วนตัว)</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="field-item">
+        <span class="field-label">อีเมลผู้รายงาน</span>
+        <span>
+          <span class="field-value redacted" id="emailField">●●●●●●●●@●●●●●●</span>
+          <button class="btn-reveal" id="revealEmailBtn" title="แสดงเฉพาะผู้ที่มีสิทธิ์">🔓 ดู</button>
+        </span>
+      </div>
+      <div class="field-item">
+        <span class="field-label">เบอร์โทรผู้รายงาน</span>
+        <span>
+          <span class="field-value redacted" id="phoneField">●●●-●●●-●●●●</span>
+          <button class="btn-reveal" id="revealPhoneBtn" title="แสดงเฉพาะผู้ที่มีสิทธิ์">🔓 ดู</button>
+        </span>
+      </div>
+      <div style="margin-top:4px">
+        <span class="private-notice">🔒 ข้อมูลนี้จะถูกเปิดเผยเฉพาะผู้ดูแลระบบเท่านั้น</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="notFoundMsg" style="display:none">
+  <div class="not-found">
+    <div class="icon">🔍</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text-main);margin-bottom:8px">ไม่พบรายการนี้</div>
+    <div style="margin-bottom:20px">รายการนี้อาจถูกลบไปแล้ว หรือ ID ไม่ถูกต้อง</div>
+    <a href="index.html" class="btn-evidence">← กลับหน้าหลัก</a>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, collection, getDocs, query, where
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBNTSreowniTxRkXIxEji4NpI6SaVYioSk",
+  authDomain: "blacklistseller-5b16f.firebaseapp.com",
+  projectId: "blacklistseller-5b16f",
+  storageBucket: "blacklistseller-5b16f.firebasestorage.app",
+  messagingSenderId: "763345140697",
+  appId: "1:763345140697:web:cdc698f644a8196da4f7c8"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const auth = getAuth(app);
+
+const ADMIN_EMAIL = 'ruok512345@gmail.com';
+
+/* ===== Utils ===== */
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+function formatDate(ts) {
+  if (!ts) return '';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  const diff = Date.now() - date.getTime();
+  const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), dy = Math.floor(diff/86400000);
+  if (m < 1) return 'เมื่อสักครู่';
+  if (m < 60) return m + ' นาทีที่แล้ว';
+  if (h < 24) return h + ' ชั่วโมงที่แล้ว';
+  if (dy < 7) return dy + ' วันที่แล้ว';
+  return date.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function tagClass(tag) {
+  return {'ไม่ส่งของ':'tag-no-delivery','หลอกโอนเงิน':'tag-scam-transfer','ของไม่ตรงปก':'tag-not-as-described','หลอกลงทุน':'tag-investment-scam'}[tag]||'tag-other';
+}
+const avPalette = ['av-coral','av-blue','av-amber','av-pink','av-mint','av-purple'];
+function avatarClass(name) {
+  let h = 0;
+  for (let i = 0; i < (name||'').length; i++) h = (h*31 + name.charCodeAt(i)) % avPalette.length;
+  return avPalette[Math.abs(h)];
+}
+function maskEmail(email) {
+  if (!email) return null;
+  const [user, domain] = email.split('@');
+  if (!domain) return null;
+  const masked = user.slice(0,2) + '●'.repeat(Math.max(user.length-2,3));
+  return masked + '@' + domain;
+}
+function maskPhone(phone) {
+  if (!phone) return null;
+  const cleaned = phone.replace(/\D/g,'');
+  if (cleaned.length < 6) return null;
+  return cleaned.slice(0,3) + '-●●●-' + cleaned.slice(-2) + '●●';
+}
+function toast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = 'toast' + (type==='error'?' toast-error':'');
+  el.textContent = msg;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),300); }, 2500);
+}
+
+/* ===== Load entry ===== */
+const params = new URLSearchParams(location.search);
+const entryId = params.get('id');
+
+let currentUser = null;
+let entryData = null;
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  // If entry already loaded, re-render private section based on auth
+  if (entryData) renderPrivateFields(entryData, user);
+});
+
+async function load() {
+  if (!entryId) { showNotFound(); return; }
+  try {
+    const snap = await getDoc(doc(db, 'entries', entryId));
+    if (!snap.exists() || snap.data().status !== 'approved') { showNotFound(); return; }
+    entryData = { id: snap.id, ...snap.data() };
+
+    // Count how many entries share same name
+    const sameQ = query(collection(db,'entries'), where('name','==',entryData.name), where('status','==','approved'));
+    const sameSnap = await getDocs(sameQ);
+    const sameCount = sameSnap.size;
+    const totalAmt = sameSnap.docs.reduce((s,d)=>s+Number(d.data().amount||0),0);
+
+    renderEntry(entryData, sameCount, totalAmt);
+  } catch (err) {
+    console.error(err);
+    toast('เกิดข้อผิดพลาดในการโหลดข้อมูล','error');
+    showNotFound();
+  } finally {
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
+}
+
+function showNotFound() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+  document.getElementById('notFoundMsg').style.display = 'block';
+}
+
+function renderEntry(entry, sameCount, totalAmt) {
+  document.title = `${entry.name} – Backlist เช็คก่อนโอน`;
+
+  const reportId = String(entry.id).replace(/\D/g,'').slice(-8) || '0';
+  document.getElementById('reportId').textContent = reportId;
+  document.getElementById('reportDate').textContent = 'แจ้งเมื่อ ' + formatDate(entry.createdAt);
+
+  // Hero
+  const av = document.getElementById('heroAvatar');
+  av.className = 'hero-avatar ' + avatarClass(entry.name||'?');
+  av.textContent = (entry.name||'?').charAt(0);
+  document.getElementById('heroName').textContent =
+    (entry.name||'') + (entry.lastname ? ' ' + entry.lastname : '');
+
+  // Badges
+  const badgesEl = document.getElementById('heroBadges');
+  badgesEl.innerHTML = `<span class="tag ${tagClass(entry.tag)}">${esc(entry.tag)}</span>`;
+  if (sameCount > 1)
+    badgesEl.innerHTML += `<span class="report-count-pill">📋 ถูกแจ้ง ${sameCount} ครั้ง</span>`;
+  if (totalAmt > 0)
+    badgesEl.innerHTML += `<span class="amount-pill">💰 ยอดรวม ${totalAmt.toLocaleString()} บาท</span>`;
+
+  // Main fields
+  const fields = [
+    entry.contact   && { icon:'📌', label:'ข้อมูลติดต่อ (ผู้ถูกแจ้ง)', value: entry.contact },
+    entry.bank      && { icon:'🏦', label:'ธนาคาร', value: entry.bank },
+    entry.nationalId && { icon:'🪪', label:'เลขบัตรประชาชน', value: entry.nationalId },
+    entry.product   && { icon:'🧾', label:'สินค้า/บริการ', value: entry.product },
+    entry.amount    && { icon:'💸', label:'ยอดที่ถูกโกง', value: Number(entry.amount).toLocaleString() + ' บาท', highlight: true },
+    entry.transferDate && { icon:'📅', label:'วันที่โอนเงิน', value: entry.transferDate },
+    entry.province  && { icon:'📍', label:'จังหวัด', value: entry.province },
+    entry.reporter  && { icon:'🏪', label:'เพจ/ร้านค้าที่เกี่ยวข้อง', value: entry.reporter },
+  ].filter(Boolean);
+
+  const mainEl = document.getElementById('mainFields');
+  mainEl.innerHTML = fields.map(f => `
+    <div class="field-item">
+      <span class="field-label">${f.icon} ${esc(f.label)}</span>
+      <span class="field-value ${f.highlight?'highlight':''}">${esc(f.value)}</span>
+    </div>`).join('');
+
+  // Description
+  if (entry.desc) {
+    document.getElementById('descCard').style.display = '';
+    document.getElementById('descBlock').textContent = entry.desc;
+  }
+
+  // Evidence
+  if (entry.evidenceUrl || entry.slipUrl) {
+    document.getElementById('evidenceCard').style.display = '';
+    let html = '';
+    const isImg = (u) => /^data:image\//.test(u) || /\.(jpe?g|png|gif|webp|bmp|svg)(\?.*)?$/i.test(u);
+
+    if (entry.evidenceUrl) {
+      if (isImg(entry.evidenceUrl)) {
+        html += `<a href="${esc(entry.evidenceUrl)}" target="_blank" rel="noopener"><img src="${esc(entry.evidenceUrl)}" alt="หลักฐาน" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border-soft);margin-bottom:10px;display:block"></a>`;
+      } else {
+        html += `<a href="${esc(entry.evidenceUrl)}" target="_blank" rel="noopener" class="btn-evidence" style="margin-bottom:8px;display:inline-flex">🖼️ ดูหลักฐาน / รูปภาพ ↗</a>`;
+      }
+    }
+    if (entry.slipUrl) {
+      if (isImg(entry.slipUrl)) {
+        html += `<a href="${esc(entry.slipUrl)}" target="_blank" rel="noopener"><img src="${esc(entry.slipUrl)}" alt="สลิปโอนเงิน" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border-soft);margin-top:8px;display:block"></a>`;
+      } else {
+        html += `<br><a href="${esc(entry.slipUrl)}" target="_blank" rel="noopener" class="btn-evidence" style="background:var(--blue-500);margin-top:8px;display:inline-flex">🧾 ดูสลิปโอนเงิน ↗</a>`;
+      }
+    }
+    document.getElementById('evidenceBlock').innerHTML = html;
+  }
+
+  // Private fields (masked by default)
+  renderPrivateFields(entry, currentUser);
+
+  document.getElementById('pageWrapper').style.display = '';
+}
+
+function renderPrivateFields(entry, user) {
+  const isAdmin = user && user.email === ADMIN_EMAIL;
+
+  const emailEl  = document.getElementById('emailField');
+  const phoneEl  = document.getElementById('phoneField');
+  const revEmail = document.getElementById('revealEmailBtn');
+  const revPhone = document.getElementById('revealPhoneBtn');
+
+  // Email
+  const rawEmail = entry.contactEmail || entry.submittedBy || '';
+  if (rawEmail) {
+    if (isAdmin) {
+      emailEl.className = 'field-value';
+      emailEl.textContent = rawEmail;
+      revEmail.style.display = 'none';
+    } else {
+      emailEl.className = 'field-value redacted';
+      emailEl.textContent = maskEmail(rawEmail) || '●●●●●@●●●●';
+      revEmail.style.display = '';
+    }
+  } else {
+    emailEl.textContent = 'ไม่ได้ระบุ';
+    emailEl.className = 'field-value';
+    revEmail.style.display = 'none';
+  }
+
+  // Phone
+  const rawPhone = entry.contactPhone || '';
+  if (rawPhone) {
+    if (isAdmin) {
+      phoneEl.className = 'field-value';
+      phoneEl.textContent = rawPhone;
+      revPhone.style.display = 'none';
+    } else {
+      phoneEl.className = 'field-value redacted';
+      phoneEl.textContent = maskPhone(rawPhone) || '●●●-●●●-●●●●';
+      revPhone.style.display = '';
+    }
+  } else {
+    phoneEl.textContent = 'ไม่ได้ระบุ';
+    phoneEl.className = 'field-value';
+    revPhone.style.display = 'none';
+  }
+}
+
+// Reveal buttons → prompt login hint (non-admin cannot access)
+document.getElementById('revealEmailBtn').addEventListener('click', () => {
+  toast('ข้อมูลส่วนตัวนี้เปิดดูได้เฉพาะผู้ดูแลระบบเท่านั้น 🔒', 'error');
+});
+document.getElementById('revealPhoneBtn').addEventListener('click', () => {
+  toast('ข้อมูลส่วนตัวนี้เปิดดูได้เฉพาะผู้ดูแลระบบเท่านั้น 🔒', 'error');
+});
+
+load();
+</script>
+</body>
+</html>

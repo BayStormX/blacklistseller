@@ -90,19 +90,26 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 .section-title{font-size:17px;font-weight:700;color:var(--mint-700);margin:28px 0 12px 2px;display:flex;align-items:center;gap:8px}
 .count-badge{background:var(--mint-100);color:var(--mint-600);font-size:12px;padding:2px 10px;border-radius:var(--radius-pill);font-weight:700}
 
-/* Cards */
-#listContainer{display:flex;flex-direction:column;gap:10px}
-.entry-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;transition:box-shadow .15s,border-color .15s;animation:fadeInUp .3s ease both}
-.entry-card:hover{box-shadow:var(--shadow-card);border-color:var(--border-strong)}
-.entry-left{display:flex;gap:12px;align-items:flex-start;flex:1;min-width:200px}
-.avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex-shrink:0;font-size:17px;text-transform:uppercase}
-.av-coral{background:var(--coral-500)} .av-blue{background:var(--blue-500)} .av-amber{background:var(--amber-500)} .av-pink{background:var(--pink-500)} .av-mint{background:var(--mint-500)} .av-purple{background:#7F77DD}
-.entry-info{display:flex;flex-direction:column;gap:2px}
-.entry-name{font-weight:700;font-size:15px}
-.entry-meta{font-size:12px;color:var(--text-muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.entry-desc{font-size:13px;color:#2c4a40;margin-top:4px;max-width:480px}
-.entry-date{font-size:11px;color:var(--text-muted);margin-top:4px}
-.entry-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+/* Cards - report style */
+#listContainer{display:flex;flex-direction:column;gap:12px}
+.entry-card{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-lg);padding:16px 18px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .15s,border-color .15s;animation:fadeInUp .3s ease both}
+.entry-card:hover{box-shadow:0 4px 16px rgba(15,110,86,0.1);border-color:var(--border-strong)}
+.entry-card-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.entry-id{font-size:11px;color:var(--text-muted);font-weight:600;background:var(--mint-100);border-radius:var(--radius-pill);padding:2px 10px}
+.entry-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.entry-name{font-weight:800;font-size:15px;color:var(--text-main)}
+.entry-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px 16px}
+.entry-field{display:flex;align-items:flex-start;gap:5px;font-size:12.5px}
+.entry-field-icon{flex-shrink:0;font-size:13px;line-height:1.6}
+.entry-field-label{color:var(--text-muted);font-weight:600;white-space:nowrap}
+.entry-field-value{color:var(--text-main);font-weight:500;word-break:break-word}
+.entry-stats-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat-pill{display:inline-flex;align-items:center;gap:4px;border-radius:var(--radius-pill);padding:3px 10px;font-size:12px;font-weight:700}
+.stat-pill-count{background:#E8F5EE;color:var(--mint-700)}
+.stat-pill-amount{background:#FFF3D6;color:#8A5700}
+.entry-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border-soft);padding-top:10px}
+.btn-detail{background:var(--mint-100);color:var(--mint-700);border:1px solid var(--mint-200);border-radius:var(--radius-md);padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-detail:hover{background:var(--mint-200);text-decoration:none}
 .entry-actions-row{display:flex;gap:6px}
 
 /* Pending */
@@ -172,6 +179,28 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 @media(max-width:480px){
   .topbar-inner{flex-direction:column;align-items:flex-start}
 }
+
+/* Big report form modal */
+.report-modal-overlay{display:none;position:fixed;inset:0;background:rgba(4,52,44,.5);align-items:center;justify-content:center;z-index:1000;padding:16px}
+.report-modal-overlay.active{display:flex}
+.report-modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:600px;display:flex;flex-direction:column;box-shadow:var(--shadow-modal);max-height:92vh;overflow:hidden;animation:fadeInUp .25s ease}
+.report-modal-header{padding:18px 22px 14px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:linear-gradient(135deg,var(--mint-500),var(--mint-600));border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.report-modal-header h3{font-size:18px;font-weight:800;color:#fff}
+.report-modal-header .modal-close{color:rgba(255,255,255,.8)}
+.report-modal-header .modal-close:hover{background:rgba(255,255,255,.2);color:#fff}
+.report-modal-body{overflow-y:auto;padding:0 22px 22px;flex:1}
+.section-divider{display:flex;align-items:center;gap:10px;margin:20px 0 14px;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--mint-500),var(--mint-600));border-radius:var(--radius-md);padding:8px 14px}
+.section-divider-alt{background:linear-gradient(135deg,var(--amber-500),#d47c00)}
+.section-divider-warn{background:linear-gradient(135deg,var(--coral-500),#b03010)}
+.warn-box{background:#fff8e1;border:1px solid var(--amber-500);border-radius:var(--radius-md);padding:10px 14px;font-size:12.5px;color:var(--amber-700);margin-bottom:14px;line-height:1.6}
+.warn-box.red{background:#fff1f0;border-color:var(--coral-500);color:var(--coral-700)}
+.bank-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px}
+.bank-row .form-group{flex:1;margin-bottom:0}
+.btn-add-bank{background:var(--mint-500);color:#fff;border:none;border-radius:var(--radius-md);padding:10px 16px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;height:42px;margin-top:26px}
+.btn-add-bank:hover{background:var(--mint-600)}
+.report-footer{display:flex;gap:8px;justify-content:flex-end;padding:14px 22px;border-top:1px solid var(--border-soft);flex-shrink:0}
+.hint-note{font-size:11.5px;color:var(--text-muted);margin-top:4px;line-height:1.5}
+.required-star{color:var(--coral-500);font-weight:800}
 </style>
 </head>
 <body>
@@ -301,22 +330,93 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
   </div>
 </div>
 
-<!-- Modal: Add/Edit Entry -->
-<div class="modal-overlay" id="entryOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="entryModalTitle">แจ้งแบล็กลิสต์</h3>
+<!-- Modal: Add/Edit Entry (Full Report Form) -->
+<div class="report-modal-overlay" id="entryOverlay">
+  <div class="report-modal">
+    <div class="report-modal-header">
+      <h3 id="entryModalTitle">📋 แจ้งแบล็กลิสต์</h3>
       <button class="modal-close" id="entryClose">✕</button>
     </div>
     <form id="entryForm">
-      <div class="form-group">
-        <label>ชื่อ / เพจ / Line ID / ชื่อบัญชี *</label>
-        <input type="text" id="inputName" placeholder="เช่น เพจ Korea Shop, นางสาวน้ำฝน xxx">
-        <div class="field-error">กรุณากรอกข้อมูลในช่องนี้</div>
+    <div class="report-modal-body">
+
+      <!-- ส่วน 1: ข้อมูลผู้ขาย -->
+      <div class="section-divider">👤 ข้อมูลผู้ขาย</div>
+      <div class="warn-box">
+        เพื่อป้องกันผู้บริสุทธิ์เสียหาย หากไม่แน่ใจให้ใส่ว่า "ไม่ทราบ"<br>
+        🔴 ใส่ชื่อตามบัญชีที่โอนเงินไปเท่านั้น ไม่ใช่ชื่อเพจ หรือชื่อประชาชนที่ถูกอ้าง
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ชื่อคนขาย (ภาษาไทย) <span class="required-star">*</span></label>
+          <input type="text" id="inputName" placeholder="ชื่อบัญชีคนขาย (ไม่ต้องมีนาง นางสาว)">
+          <div class="field-error">กรุณากรอกข้อมูลในช่องนี้</div>
+        </div>
+        <div class="form-group">
+          <label>นามสกุล (ภาษาไทย) <span class="required-star">*</span></label>
+          <input type="text" id="inputLastname" placeholder="นามสกุลบัญชีคนขาย">
+        </div>
       </div>
       <div class="form-group">
-        <label>ช่องทางติดต่อ / เลขบัญชี / เบอร์โทร</label>
-        <input type="text" id="inputContact" placeholder="เช่น เบอร์โทร, เลขบัญชี, Line ID">
+        <label>เลขบัตรประชาชนคนขาย</label>
+        <input type="text" id="inputNationalId" placeholder="ไม่รู้ไม่ต้องใส่" maxlength="13">
+        <div class="hint-note">ใส่เฉพาะตัวเลข 13 หลัก หากไม่ทราบให้เว้นว่าง</div>
+      </div>
+
+      <!-- ส่วน 2: ข้อมูลบัญชีธนาคาร -->
+      <div class="section-divider section-divider-alt">🏦 ข้อมูลบัญชีธนาคาร</div>
+      <div class="hint-note" style="margin-bottom:10px">บัญชีธนาคารคนขาย • หากไม่รู้เลขบัญชี ให้กรอก 0000000</div>
+      <div id="bankRows">
+        <div class="bank-row">
+          <div class="form-group">
+            <label>บัญชีคนขาย <span class="required-star">*</span></label>
+            <input type="text" id="inputContact" placeholder="ตัวเลขเท่านั้น">
+          </div>
+          <div class="form-group">
+            <label>เลือกธนาคาร <span class="required-star">*</span></label>
+            <select id="inputBank">
+              <option value="">เลือกธนาคาร</option>
+              <option>ธ.กรุงเทพ (BBL)</option>
+              <option>ธ.กสิกรไทย (KBANK)</option>
+              <option>ธ.กรุงไทย (KTB)</option>
+              <option>ธ.ทหารไทยธนชาต (TTB)</option>
+              <option>ธ.ไทยพาณิชย์ (SCB)</option>
+              <option>ธ.กรุงศรีอยุธยา (BAY)</option>
+              <option>ธ.ออมสิน</option>
+              <option>ธ.อาคารสงเคราะห์ (GHB)</option>
+              <option>ธ.เพื่อการเกษตร (ธ.ก.ส.)</option>
+              <option>ธ.ซีไอเอ็มบีไทย</option>
+              <option>พร้อมเพย์ / PromptPay</option>
+              <option>อื่นๆ</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn-add-bank" id="addBankBtn">+ เพิ่ม</button>
+
+      <!-- ส่วน 3: รายละเอียดเรื่องยาม -->
+      <div class="section-divider" style="margin-top:20px">📦 รายละเอียดเรื่องยาม</div>
+      <div class="warn-box red">
+        ❌ ไม่รับรายงานเกี่ยวกับ แชร์ ยืมเงิน/ออมเงิน ยกเว้นตามเงื่อนไข <a href="#" style="color:var(--coral-700);font-weight:700">เงื่อนไข</a>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>สินค้าที่สั่งซื้อ <span class="required-star">*</span></label>
+          <input type="text" id="inputProduct" placeholder="สินค้า">
+        </div>
+        <div class="form-group">
+          <label>ยอดโอน <span class="required-star">*</span></label>
+          <input type="number" id="inputAmount" placeholder="ยอดโอนตามในสลิป" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>วันโอนเงิน <span class="required-star">*</span></label>
+        <input type="date" id="inputTransferDate">
+      </div>
+      <div class="form-group">
+        <label>เพจขายของ <span class="required-star">*</span></label>
+        <input type="text" id="inputReporter" placeholder="ชื่อเพจ FB, IG, LINE">
+        <div class="hint-note">เช่น FB: Sneaker Shoes ราคาถูก หรือชื่อเพจคนขาย</div>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -330,24 +430,61 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
           </select>
         </div>
         <div class="form-group">
-          <label>ชื่อผู้แจ้ง</label>
-          <input type="text" id="inputReporter" placeholder="ไม่ระบุชื่อ">
+          <label>จังหวัดของคนสร้างรายงาน</label>
+          <input type="text" id="inputProvince" placeholder="ไม่ระบุ">
         </div>
       </div>
       <div class="form-group">
-        <label>รายละเอียดเหตุการณ์ *</label>
-        <textarea id="inputDesc" rows="4" placeholder="อธิบายเหตุการณ์ที่เกิดขึ้น เช่น วันที่ จำนวนเงิน"></textarea>
+        <label>รายละเอียดเพิ่มเติม <span class="required-star">*</span></label>
+        <div class="hint-note" style="margin-bottom:6px">บรรยายการโกงให้ละเอียด เช่น คนขายมีพฤติกรรมอย่างไร พร้อมใส่ชื่อและลิงก์เพจขายของ FB,LINE,IG</div>
+        <textarea id="inputDesc" rows="5" placeholder="อธิบายเหตุการณ์ที่เกิดขึ้น เช่น วันที่ จำนวนเงิน ลิงก์เพจ"></textarea>
         <div class="field-error">กรุณากรอกรายละเอียดเหตุการณ์</div>
       </div>
+
+      <!-- ส่วน 4: หลักฐานรูปภาพ -->
+      <div class="section-divider section-divider-alt">🖼️ หลักฐานรูปภาพ</div>
+      <div class="hint-note" style="margin-bottom:10px">
+        ⭐ หลักฐานแขกตกลนาอย่างน้อย 5 รูป เลือกหลายรูปที่เดียว แล้วค่อยกดส่ง<br>
+        🔴 แชทไม่ตรบ แชทไม่เรียง หรือลงรูปประมาณ โดนลบรายงานทิ้งทันที
+      </div>
       <div class="form-group">
-        <label>ลิงก์หลักฐาน (ไม่บังคับ)</label>
-        <input type="text" id="inputEvidence" placeholder="เช่น ลิงก์รูปแชท, สลิปโอนเงิน">
-        <div class="field-hint">แนะนำให้แนบลิงก์จากบริการฝากไฟล์ที่ปลอดภัย</div>
+        <label>ลิงก์หลักฐาน / โฟลเดอร์รูปภาพ</label>
+        <input type="text" id="inputEvidence" placeholder="เช่น ลิงก์ Google Drive, Imgur, หรือ URL รูปภาพ">
+        <div class="hint-note">แนะนำให้แนบลิงก์จากบริการฝากไฟล์ที่ปลอดภัย (Google Drive, Dropbox)</div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="entryCancelBtn">ยกเลิก</button>
-        <button type="submit" class="btn btn-primary">บันทึก</button>
+      <div class="form-group">
+        <label>แนบรูปหลักฐาน (ไม่บังคับ)</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="file" id="inputImage" accept="image/*" style="flex:1">
+          <img id="imagePreview" alt="ตัวอย่างรูป" style="display:none;width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid var(--border-soft)">
+        </div>
+        <div class="hint-note">แนบรูปเล็กๆ ไว้แสดงคู่กับรายการ (แนะนำไฟล์ขนาดเล็กเพื่อไม่ให้ข้อมูลใหญ่เกินไป)</div>
       </div>
+      <div class="form-group">
+        <label>สลิปโอนเงิน (ลิงก์)</label>
+        <input type="text" id="inputSlip" placeholder="ลิงก์สลิปโอนเงิน">
+        <div class="hint-note">รูปสลิปอย่าเดียว ไม่ต้องปิดชื่อตัวเองหรือ QR • เพื่อใช้ตรวจสอบบัญชีคนขายโอนเงินคืน</div>
+      </div>
+
+      <!-- ส่วน 5: ข้อมูลติดต่อกลับ -->
+      <div class="section-divider">📞 ข้อมูลติดต่อกลับ (ไม่บังคับ)</div>
+      <div class="hint-note" style="margin-bottom:10px">เพื่อประโยชน์ของคุณเอง ใส่รายละเอียดการติดต่อกลับ (โดยจะมีทันทีในระบบหลังบ้าน ไม่เผยแพร่สู่สาธารณะ)</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>อีเมลของฉัน</label>
+          <input type="email" id="inputEmail" placeholder="my_mail@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>เบอร์มือถือ</label>
+          <input type="tel" id="inputPhone" placeholder="0891234567">
+        </div>
+      </div>
+
+    </div><!-- end report-modal-body -->
+    <div class="report-footer">
+      <button type="button" class="btn btn-secondary" id="entryCancelBtn">ยกเลิก</button>
+      <button type="submit" class="btn btn-primary">💾 บันทึก</button>
+    </div>
     </form>
   </div>
 </div>
@@ -517,31 +654,70 @@ function renderList() {
   }
 
   container.innerHTML = '';
-  entries.forEach(entry => {
+  entries.forEach((entry, idx) => {
     const card = document.createElement('div');
     card.className = 'entry-card';
-    const avClass = avatarClass(entry.name || '?');
-    const initial = (entry.name || '?').charAt(0);
+    const reportId = entry.id ? String(entry.id).slice(-6) : String(idx + 1).padStart(6,'0');
+    const sameNameCount = allEntries.filter(e => e.name === entry.name).length;
+    const totalAmt = allEntries.filter(e => e.name === entry.name && e.amount).reduce((s,e)=>s+Number(e.amount),0);
+
     card.innerHTML = `
-      <div class="entry-left">
-        <div class="avatar ${avClass}">${escHtml(initial)}</div>
-        <div class="entry-info">
-          <div class="entry-name">${escHtml(entry.name)}</div>
-          <div class="entry-meta">
-            ${entry.contact ? `<span>📌 ${escHtml(entry.contact)}</span>` : ''}
-            ${entry.reporter ? `<span>👤 แจ้งโดย ${escHtml(entry.reporter)}</span>` : ''}
-          </div>
-          ${entry.desc ? `<div class="entry-desc">${escHtml(entry.desc)}</div>` : ''}
-          ${entry.evidenceUrl ? `<div class="entry-date"><a href="${escHtml(entry.evidenceUrl)}" target="_blank" rel="noopener">ดูหลักฐานเพิ่มเติม ↗</a></div>` : ''}
-          <div class="entry-date">แจ้งเมื่อ ${formatDate(entry.createdAt)}</div>
+      <div class="entry-card-header">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="entry-id">🔖 เลขรายงาน: ${escHtml(reportId)}</span>
+          <span class="tag ${tagClass(entry.tag)}">${escHtml(entry.tag)}</span>
         </div>
-      </div>
-      <div class="entry-actions">
-        <span class="tag ${tagClass(entry.tag)}">${escHtml(entry.tag)}</span>
         ${isAdmin() ? `<div class="entry-actions-row">
           <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${entry.id}">แก้ไข</button>
           <button class="btn btn-danger btn-sm" data-action="delete" data-id="${entry.id}">ลบ</button>
         </div>` : ''}
+      </div>
+
+      <div class="entry-name-row">
+        <span class="entry-field-icon">👤</span>
+        <span class="entry-field-label">ชื่อคนขาย:</span>
+        <span class="entry-name">${escHtml(entry.name)}${entry.lastname ? ' ' + escHtml(entry.lastname) : ''}</span>
+      </div>
+
+      <div class="entry-body">
+        ${(entry.product || entry.contact) ? `<div class="entry-field">
+          <span class="entry-field-icon">🧾</span>
+          <div><span class="entry-field-label">สินค้า: </span><span class="entry-field-value">${escHtml(entry.product || entry.contact)}</span></div>
+        </div>` : ''}
+        ${entry.amount ? `<div class="entry-field">
+          <span class="entry-field-icon">💸</span>
+          <div><span class="entry-field-label">ยอดโอน: </span><span class="entry-field-value" style="color:var(--coral-700);font-weight:700">${Number(entry.amount).toLocaleString()} บาท</span></div>
+        </div>` : ''}
+        ${entry.transferDate ? `<div class="entry-field">
+          <span class="entry-field-icon">📅</span>
+          <div><span class="entry-field-label">วันโอนเงิน: </span><span class="entry-field-value">${escHtml(entry.transferDate)}</span></div>
+        </div>` : ''}
+        ${entry.reporter ? `<div class="entry-field">
+          <span class="entry-field-icon">🏪</span>
+          <div><span class="entry-field-label">เพจขายของ: </span><span class="entry-field-value">${escHtml(entry.reporter)}</span></div>
+        </div>` : ''}
+        ${entry.bank ? `<div class="entry-field">
+          <span class="entry-field-icon">🏦</span>
+          <div><span class="entry-field-label">ธนาคาร: </span><span class="entry-field-value">${escHtml(entry.bank)}</span></div>
+        </div>` : ''}
+        <div class="entry-field">
+          <span class="entry-field-icon">🕐</span>
+          <div><span class="entry-field-label">วันลงข้อมูล: </span><span class="entry-field-value">${formatDate(entry.createdAt)}</span></div>
+        </div>
+        ${entry.desc ? `<div class="entry-field" style="grid-column:1/-1">
+          <span class="entry-field-icon">📝</span>
+          <div><span class="entry-field-value" style="color:#2c4a40;line-height:1.5">${escHtml(entry.desc)}</span></div>
+        </div>` : ''}
+      </div>
+
+      <div class="entry-card-footer">
+        <div class="entry-stats-row">
+          <span class="stat-pill stat-pill-count">📋 พบ ${sameNameCount} ครั้ง</span>
+          ${totalAmt > 0 ? `<span class="stat-pill stat-pill-amount">💰 ยอดรวม ${totalAmt.toLocaleString()} บาท</span>` : ''}
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <a href="detail.html?id=${entry.id}" class="btn-detail">ดูรายละเอียด →</a>
+        </div>
       </div>`;
     container.appendChild(card);
   });
@@ -760,11 +936,21 @@ function openEntryModal(id = null) {
     const entry = allEntries.find(e => e.id === id);
     if (!entry) return;
     document.getElementById('inputName').value = entry.name || '';
+    document.getElementById('inputLastname').value = entry.lastname || '';
+    document.getElementById('inputNationalId').value = entry.nationalId || '';
     document.getElementById('inputContact').value = entry.contact || '';
+    document.getElementById('inputBank').value = entry.bank || '';
+    document.getElementById('inputProduct').value = entry.product || '';
+    document.getElementById('inputAmount').value = entry.amount || '';
+    document.getElementById('inputTransferDate').value = entry.transferDate || '';
     document.getElementById('inputTag').value = entry.tag || 'อื่นๆ';
+    document.getElementById('inputReporter').value = entry.reporter || '';
+    document.getElementById('inputProvince').value = entry.province || '';
     document.getElementById('inputDesc').value = entry.desc || '';
     document.getElementById('inputEvidence').value = entry.evidenceUrl || '';
-    document.getElementById('inputReporter').value = entry.reporter || '';
+    document.getElementById('inputSlip').value = entry.slipUrl || '';
+    document.getElementById('inputEmail').value = entry.contactEmail || '';
+    document.getElementById('inputPhone').value = entry.contactPhone || '';
   } else {
     document.getElementById('entryForm').reset();
   }
@@ -779,6 +965,34 @@ document.getElementById('entryClose').onclick = closeEntryModal;
 document.getElementById('entryCancelBtn').onclick = closeEntryModal;
 document.getElementById('entryOverlay').onclick = e => { if (e.target.id === 'entryOverlay') closeEntryModal(); };
 
+/* Add extra bank account rows */
+document.getElementById('addBankBtn').addEventListener('click', () => {
+  const row = document.createElement('div');
+  row.className = 'bank-row';
+  row.innerHTML = `
+    <div class="form-group">
+      <label>บัญชีเพิ่มเติม</label>
+      <input type="text" placeholder="ตัวเลขเท่านั้น">
+    </div>
+    <div class="form-group">
+      <label>เลือกธนาคาร</label>
+      <select>
+        <option value="">เลือกธนาคาร</option>
+        <option>ธ.กรุงเทพ (BBL)</option>
+        <option>ธ.กสิกรไทย (KBANK)</option>
+        <option>ธ.กรุงไทย (KTB)</option>
+        <option>ธ.ทหารไทยธนชาต (TTB)</option>
+        <option>ธ.ไทยพาณิชย์ (SCB)</option>
+        <option>ธ.กรุงศรีอยุธยา (BAY)</option>
+        <option>ธ.ออมสิน</option>
+        <option>พร้อมเพย์ / PromptPay</option>
+        <option>อื่นๆ</option>
+      </select>
+    </div>
+    <button type="button" onclick="this.closest('.bank-row').remove()" style="background:var(--coral-100);color:var(--coral-700);border:none;border-radius:var(--radius-md);padding:0 10px;font-size:18px;cursor:pointer;margin-top:24px;height:42px">✕</button>`;
+  document.getElementById('bankRows').appendChild(row);
+});
+
 document.getElementById('entryForm').onsubmit = async e => {
   e.preventDefault();
   const name = document.getElementById('inputName').value.trim();
@@ -790,11 +1004,21 @@ document.getElementById('entryForm').onsubmit = async e => {
 
   const data = {
     name,
+    lastname: document.getElementById('inputLastname').value.trim(),
+    nationalId: document.getElementById('inputNationalId').value.trim(),
     contact: document.getElementById('inputContact').value.trim(),
+    bank: document.getElementById('inputBank').value,
+    product: document.getElementById('inputProduct').value.trim(),
+    amount: document.getElementById('inputAmount').value.trim(),
+    transferDate: document.getElementById('inputTransferDate').value,
     tag: document.getElementById('inputTag').value,
+    reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุ',
+    province: document.getElementById('inputProvince').value.trim(),
     desc,
     evidenceUrl: document.getElementById('inputEvidence').value.trim(),
-    reporter: document.getElementById('inputReporter').value.trim() || (currentUser?.displayName || currentUser?.email || 'ไม่ระบุชื่อ'),
+    slipUrl: document.getElementById('inputSlip').value.trim(),
+    contactEmail: document.getElementById('inputEmail').value.trim(),
+    contactPhone: document.getElementById('inputPhone').value.trim(),
     updatedAt: Timestamp.now()
   };
 
@@ -840,7 +1064,7 @@ document.getElementById('listContainer').addEventListener('click', e => {
 });
 
 /* ===== Add Entry Button ===== */
-document.getElementById('addEntryBtn').onclick = () => requireAuth(() => openEntryModal());
+document.getElementById('addEntryBtn').onclick = () => requireAuth(() => { window.location.href = 'report.html'; });
 
 /* ===== Search & Filter ===== */
 document.getElementById('searchInput').addEventListener('input', debounce(e => {

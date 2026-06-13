@@ -16,7 +16,7 @@ const Renderer = (() => {
 
     card.innerHTML = `
       <div class="entry-left">
-        <div class="avatar ${avClass}" aria-hidden="true">${Utils.escapeHtml(initial)}</div>
+        ${entry.imageData ? `<img src="${entry.imageData}" alt="" class="entry-thumb">` : `<div class="avatar ${avClass}" aria-hidden="true">${Utils.escapeHtml(initial)}</div>`}
         <div class="entry-info">
           <div class="entry-name">${Utils.escapeHtml(entry.name)}</div>
           <div class="entry-meta">
