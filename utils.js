@@ -1,6 +1,6 @@
 /* ===================================================
    utils.js
-   ฟังก์ชันช่วยทั่วไป
+   ຟັງຊັນຊ່ວຍທົ່ວໄປ
    =================================================== */
 
 const Utils = (() => {
@@ -22,12 +22,12 @@ const Utils = (() => {
     const diffHour = Math.floor(diffMs / 3600000);
     const diffDay = Math.floor(diffMs / 86400000);
 
-    if (diffMin < 1) return 'เมื่อสักครู่';
-    if (diffMin < 60) return `${diffMin} นาทีที่แล้ว`;
-    if (diffHour < 24) return `${diffHour} ชั่วโมงที่แล้ว`;
-    if (diffDay < 7) return `${diffDay} วันที่แล้ว`;
+    if (diffMin < 1) return 'ສາກຄູ່ກ່ອນ';
+    if (diffMin < 60) return `${diffMin} ນາທີກ່ອນ`;
+    if (diffHour < 24) return `${diffHour} ຊົ່ວໂມງກ່ອນ`;
+    if (diffDay < 7) return `${diffDay} ວັນກ່ອນ`;
 
-    return date.toLocaleDateString('th-TH', {
+    return date.toLocaleDateString('lo-LA', {
       year: 'numeric', month: 'short', day: 'numeric'
     });
   }
@@ -35,11 +35,11 @@ const Utils = (() => {
   // map แท็กเป็น class สี
   function tagClass(tag) {
     const map = {
-      'ไม่ส่งของ': 'tag-no-delivery',
-      'หลอกโอนเงิน': 'tag-scam-transfer',
-      'ของไม่ตรงปก': 'tag-not-as-described',
-      'หลอกลงทุน': 'tag-investment-scam',
-      'อื่นๆ': 'tag-other'
+      'ບໍ່ສົ່ງສິນຄ້າ': 'tag-no-delivery',
+      'ຫລອກໂອນເງິນ': 'tag-scam-transfer',
+      'ສິນຄ້າບໍ່ຕົງປົກ': 'tag-not-as-described',
+      'ຫລອກລົງທຶນ': 'tag-investment-scam',
+      'ອື່ນໆ': 'tag-other'
     };
     return map[tag] || 'tag-other';
   }

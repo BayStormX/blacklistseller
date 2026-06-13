@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>เข้าสู่ระบบ – Backlist เช็คก่อนโอน</title>
+<title>ເຂົ້າສູ່ລະບົບ – Backlist ກວດກ່ອນໂອນ</title>
 <link rel="stylesheet" href="style.css">
 <style>
   body {
@@ -166,43 +166,43 @@
 
   <div class="login-brand">
     <div class="login-brand-icon">🛡️</div>
-    <div class="login-brand-name">Backlist เช็คก่อนโอน</div>
-    <div class="login-brand-sub">รวบรวมรายชื่อที่ถูกแจ้งว่าฉ้อโกง</div>
+    <div class="login-brand-name">Backlist ກວດກ່ອນໂອນ</div>
+    <div class="login-brand-sub">ລວບລວມລາຍຊື່ທີ່ຖືກແຈ້ງວ່າໂກງ</div>
   </div>
 
   <div class="login-card">
-    <h2>เข้าสู่ระบบ</h2>
+    <h2>ເຂົ້າສູ່ລະບົບ</h2>
 
     <div class="login-error" id="loginError">
       <span>⚠️</span>
-      <span id="loginErrorMsg">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</span>
+      <span id="loginErrorMsg">ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ</span>
     </div>
 
     <div class="form-group" style="margin-bottom:0">
-      <label for="usernameInput">ชื่อผู้ใช้</label>
-      <input type="text" id="usernameInput" placeholder="กรอกชื่อผู้ใช้" autocomplete="username" autofocus>
+      <label for="usernameInput">ຊື່ຜູ້ໃຊ້</label>
+      <input type="text" id="usernameInput" placeholder="ໃສ່ຊື່ຜູ້ໃຊ້" autocomplete="username" autofocus>
     </div>
 
     <div class="form-group" style="margin-bottom:0">
-      <label for="passwordInput">รหัสผ่าน</label>
+      <label for="passwordInput">ລະຫັດຜ່ານ</label>
       <div class="input-password-wrap">
-        <input type="password" id="passwordInput" placeholder="กรอกรหัสผ่าน" autocomplete="current-password">
-        <button type="button" class="toggle-pw" id="togglePw" aria-label="แสดง/ซ่อนรหัสผ่าน">👁</button>
+        <input type="password" id="passwordInput" placeholder="ໃສ່ລະຫັດຜ່ານ" autocomplete="current-password">
+        <button type="button" class="toggle-pw" id="togglePw" aria-label="ສະແດງ/ເຊື່ອງລະຫັດຜ່ານ">👁</button>
       </div>
     </div>
 
-    <button class="btn-login" id="loginBtn">เข้าสู่ระบบ</button>
+    <button class="btn-login" id="loginBtn">ເຂົ້າສູ່ລະບົບ</button>
   </div>
 
   <div class="login-footer">
-    รหัสเริ่มต้น: <strong>admin</strong> / <strong>admin1234</strong>
+    ລະຫັດເລີ່ມຕົ້ນ: <strong>admin</strong> / <strong>admin1234</strong>
   </div>
 
 </div>
 
 <script src="auth.js"></script>
 <script>
-  // ถ้า login แล้ว redirect ทันที
+  // ถ้า ເຂົ້າລະບົບແລ້ວ redirect ทันที
   Auth.redirectIfAuthed('index.html');
 
   const usernameInput = document.getElementById('usernameInput');
@@ -233,12 +233,12 @@
     const password = passwordInput.value;
 
     if (!username || !password) {
-      showError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+      showError('ກະລຸນາໃສ່ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານ');
       return;
     }
 
     loginBtn.classList.add('loading');
-    loginBtn.innerHTML = '<span class="spinner-inline"></span>กำลังเข้าสู่ระบบ...';
+    loginBtn.innerHTML = '<span class="spinner-inline"></span>ກຳລັງເຂົ້າສູ່ລະບົບ...';
 
     // จำลอง delay เล็กน้อยให้ดูเป็นธรรมชาติ
     setTimeout(() => {
@@ -248,7 +248,7 @@
       } else {
         showError(result.error);
         loginBtn.classList.remove('loading');
-        loginBtn.textContent = 'เข้าสู่ระบบ';
+        loginBtn.textContent = 'ເຂົ້າສູ່ລະບົບ';
         passwordInput.value = '';
         passwordInput.focus();
       }

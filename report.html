@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="lo">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>แจ้งแบล็กลิสต์ – Backlist เช็คก่อนโอน</title>
+<title>ແຈ້ງແບລັກລິດ – Backlist ກວດກ່ອນໂອນ</title>
 <style>
 :root {
   --mint-50: #EAFBF4; --mint-100: #DFF6EC; --mint-200: #BFEFDD;
@@ -179,13 +179,13 @@ label { display: block; font-size: 13px; font-weight: 600; color: var(--mint-700
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <div>กำลังโหลด...</div>
+  <div>ກຳລັງໂຫລດ...</div>
 </div>
 
 <!-- Upload progress overlay -->
 <div class="upload-overlay" id="uploadOverlay">
   <div class="spinner"></div>
-  <div>กำลังอัปโหลดรูปภาพ...</div>
+  <div>ກຳລັງອັບໂຫລດຮູບພາບ...</div>
   <div class="upload-progress-text" id="uploadProgressText">0 / 0</div>
 </div>
 
@@ -195,31 +195,31 @@ label { display: block; font-size: 13px; font-weight: 600; color: var(--mint-700
     <a href="index.html" class="brand">
       <div class="brand-icon">🛡️</div>
       <div>
-        Backlist เช็คก่อนโอน
-        <span class="brand-tagline">รวบรวมรายชื่อที่ถูกแจ้งว่าฉ้อโกง</span>
+        Backlist ກວດກ່ອນໂອນ
+        <span class="brand-tagline">ລວບລວມລາຍຊື່ທີ່ຖືກແຈ້ງວ່າໂກງ</span>
       </div>
     </a>
-    <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+    <a href="index.html" class="btn-back">← ກັບໄປໜ້າຫຼັກ</a>
   </div>
 </header>
 
 <div class="page-wrapper">
 
-  <div class="page-title">📋 แจ้งแบล็กลิสต์</div>
-  <p class="page-subtitle">กรอกข้อมูลให้ครบถ้วนเพื่อให้แอดมินตรวจสอบและอนุมัติได้รวดเร็ว</p>
+  <div class="page-title">📋 ແຈ້ງແບລັກລິດ</div>
+  <p class="page-subtitle">ປ້ອນຂໍ້ມູນໃຫ້ຄົບຖ້ວນເພື່ອໃຫ້ແອັດມິນກວດສອບ ແລະ ອະນຸມັດໄດ້ໄວ</p>
 
   <div class="login-notice" id="loginNotice" style="display:none">
-    🔑 คุณยังไม่ได้เข้าสู่ระบบ — <a href="index.html">กลับหน้าหลัก</a> แล้วเข้าสู่ระบบก่อนส่งข้อมูล
+    🔑 ທ່ານຍັງບໍ່ໄດ້ເຂົ້າສູ່ລະບົບ — <a href="index.html">ກັບໄປໜ້າຫຼັກ</a> ແລ້ວເຂົ້າສູ່ລະບົບກ່ອນສົ່ງຂໍ້ມູນ
   </div>
 
   <!-- Success screen -->
   <div class="success-screen" id="successScreen">
     <div class="success-icon">🎉</div>
-    <div class="success-title">ส่งคำขอเรียบร้อยแล้ว!</div>
-    <p class="success-sub">ขอบคุณที่แจ้งข้อมูลนะครับ<br>แอดมินจะตรวจสอบและอนุมัติรายการของคุณในเร็วๆ นี้ ⏳</p>
+    <div class="success-title">ສົ່ງຄຳຂໍສຳເລັດແລ້ວ!</div>
+    <p class="success-sub">ຂອບໃຈທີ່ແຈ້ງຂໍ້ມູນເດີ້<br>ແອັດມິນຈະກວດສອບ ແລະ ອະນຸມັດລາຍການຂອງທ່ານໃນໄວໆນີ້ ⏳</p>
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="resetForm()">📋 แจ้งรายการใหม่</button>
-      <a href="index.html" class="btn btn-secondary">← กลับหน้าหลัก</a>
+      <button class="btn btn-primary" onclick="resetForm()">📋 ແຈ້ງລາຍການໃໝ່</button>
+      <a href="index.html" class="btn btn-secondary">← ກັບໄປໜ້າຫຼັກ</a>
     </div>
   </div>
 
@@ -228,175 +228,175 @@ label { display: block; font-size: 13px; font-weight: 600; color: var(--mint-700
     <form id="entryForm">
 
       <!-- ส่วน 1: ข้อมูลผู้ขาย -->
-      <div class="section-divider">👤 ข้อมูลผู้ขาย</div>
+      <div class="section-divider">👤 ຂໍ້ມູນຄົນຂາຍ</div>
       <div class="warn-box">
-        เพื่อป้องกันผู้บริสุทธิ์เสียหาย หากไม่แน่ใจให้ใส่ว่า "ไม่ทราบ"<br>
-        🔴 ใส่ชื่อตามบัญชีที่โอนเงินไปเท่านั้น ไม่ใช่ชื่อเพจ หรือชื่อประชาชนที่ถูกอ้าง
+        ເພື່ອປ້ອງກັນຜູ້ບໍລິສຸດເສຍຫາຍ ຫາກບໍ່ແນ່ໃຈໃຫ້ໃສ່ວ່າ "ບໍ່ຮູ້ຈັກ"<br>
+        🔴 ໃສ່ຊື່ຕາມບັນຊີທີ່ໂອນເງິນໄປເທົ່ານັ້ນ ບໍ່ແມ່ນຊື່ເພຈ ຫຼື ຊື່ບຸກຄົນທີ່ຖືກອ້າງ
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>ชื่อคนขาย (ภาษาไทย) <span class="required-star">*</span></label>
-          <input type="text" id="inputName" placeholder="ชื่อบัญชีคนขาย (ไม่ต้องมีนาง นางสาว)" autocomplete="off">
-          <div class="field-error">กรุณากรอกข้อมูลในช่องนี้</div>
+          <label>ຊື່ຄົນຂາຍ <span class="required-star">*</span></label>
+          <input type="text" id="inputName" placeholder="ຊື່ບັນຊີຄົນຂາຍ (ບໍ່ຕ້ອງມີນາງ ນາງສາວ)" autocomplete="off">
+          <div class="field-error">ກະລຸນາປ້ອນຂໍ້ມູນໃນຊ່ອງນີ້</div>
         </div>
         <div class="form-group">
-          <label>นามสกุล (ภาษาไทย)</label>
-          <input type="text" id="inputLastname" placeholder="นามสกุลบัญชีคนขาย">
+          <label>ນາມສະກຸນ</label>
+          <input type="text" id="inputLastname" placeholder="ນາມສະກຸນບັນຊີຄົນຂາຍ">
         </div>
       </div>
       <div class="form-group">
-        <label>เลขบัตรประชาชนคนขาย</label>
-        <input type="text" id="inputNationalId" placeholder="ไม่รู้ไม่ต้องใส่" maxlength="13">
-        <div class="field-hint">ใส่เฉพาะตัวเลข 13 หลัก หากไม่ทราบให้เว้นว่าง</div>
+        <label>ເລກບັດປະຊາຊົນຄົນຂາຍ</label>
+        <input type="text" id="inputNationalId" placeholder="ບໍ່ຮູ້ບໍ່ຕ້ອງໃສ່" maxlength="13">
+        <div class="field-hint">ໃສ່ສະເພາະຕົວເລກ 13 ຫຼັກ ຫາກບໍ່ຮູ້ຈັກໃຫ້ປະໄວ້</div>
       </div>
 
       <!-- ส่วน 2: ข้อมูลบัญชีธนาคาร -->
-      <div class="section-divider section-divider-alt">🏦 ข้อมูลบัญชีธนาคาร</div>
-      <div class="hint-note" style="margin-bottom:10px">บัญชีธนาคารคนขาย • หากไม่รู้เลขบัญชี ให้กรอก 0000000</div>
+      <div class="section-divider section-divider-alt">🏦 ຂໍ້ມູນບັນຊີທະນາຄານ</div>
+      <div class="hint-note" style="margin-bottom:10px">ບັນຊີທະນາຄານຄົນຂາຍ • ຫາກບໍ່ຮູ້ເລກບັນຊີ ໃຫ້ປ້ອນ 0000000</div>
       <div id="bankRows">
         <div class="bank-row">
           <div class="form-group">
-            <label>บัญชีคนขาย <span class="required-star">*</span></label>
-            <input type="text" id="inputContact" placeholder="ตัวเลขเท่านั้น">
+            <label>ບັນຊີຄົນຂາຍ <span class="required-star">*</span></label>
+            <input type="text" id="inputContact" placeholder="ຕົວເລກເທົ່ານັ້ນ">
           </div>
           <div class="form-group">
-            <label>เลือกธนาคาร <span class="required-star">*</span></label>
+            <label>ເລືອກທະນາຄານ <span class="required-star">*</span></label>
             <select id="inputBank">
-              <option value="">เลือกธนาคาร</option>
-              <option>ธ.กรุงเทพ (BBL)</option>
-              <option>ธ.กสิกรไทย (KBANK)</option>
-              <option>ธ.กรุงไทย (KTB)</option>
-              <option>ธ.ทหารไทยธนชาต (TTB)</option>
-              <option>ธ.ไทยพาณิชย์ (SCB)</option>
-              <option>ธ.กรุงศรีอยุธยา (BAY)</option>
-              <option>ธ.ออมสิน</option>
-              <option>ธ.อาคารสงเคราะห์ (GHB)</option>
-              <option>ธ.เพื่อการเกษตร (ธ.ก.ส.)</option>
-              <option>ธ.ซีไอเอ็มบีไทย</option>
-              <option>พร้อมเพย์ / PromptPay</option>
-              <option>อื่นๆ</option>
+              <option value="">ເລືອກທະນາຄານ</option>
+              <option>ທ.ກຣຸງເທບ (BBL)</option>
+              <option>ທ.ກະສິກອນໄທ (KBANK)</option>
+              <option>ທ.ກຣຸງໄທ (KTB)</option>
+              <option>ທ.ທະຫານໄທທະນະຊາດ (TTB)</option>
+              <option>ທ.ໄທພານິດ (SCB)</option>
+              <option>ທ.ກຣຸງສີອະຍຸທະຢາ (BAY)</option>
+              <option>ທ.ອອມສິນ</option>
+              <option>ທ.ອາຄານສົງເຄາະ (GHB)</option>
+              <option>ທ.ເພື່ອການກະເສດ (ທ.ກ.ສ.)</option>
+              <option>ທ.ຊີໄອເອັມບີໄທ</option>
+              <option>ພຣ້ອມເພ / PromptPay</option>
+              <option>ອື່ນໆ</option>
             </select>
           </div>
         </div>
       </div>
-      <button type="button" class="btn-add-bank" id="addBankBtn">+ เพิ่มบัญชี</button>
+      <button type="button" class="btn-add-bank" id="addBankBtn">+ ເພີ່ມບັນຊີ</button>
 
       <!-- ส่วน 3: รายละเอียดเรื่องราว -->
-      <div class="section-divider" style="margin-top:24px">📦 รายละเอียดเรื่องราว</div>
+      <div class="section-divider" style="margin-top:24px">📦 ລາຍລະອຽດເລື່ອງລາວ</div>
       <div class="warn-box red">
-        ❌ ไม่รับรายงานเกี่ยวกับ แชร์ ยืมเงิน/ออมเงิน ยกเว้นตามเงื่อนไข <a href="#" style="color:var(--coral-700);font-weight:700">เงื่อนไข</a>
+        ❌ ບໍ່ຮັບລາຍງານກ່ຽວກັບ ແຊຣ໌ ກູ້ເງິນ/ຝາກເງິນ ຍົກເວັ້ນຕາມເງື່ອນໄຂ <a href="#" style="color:var(--coral-700);font-weight:700">ເງື່ອນໄຂ</a>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>สินค้าที่สั่งซื้อ <span class="required-star">*</span></label>
-          <input type="text" id="inputProduct" placeholder="สินค้า">
+          <label>ສິນຄ້າທີ່ສັ່ງຊື້ <span class="required-star">*</span></label>
+          <input type="text" id="inputProduct" placeholder="ສິນຄ້າ">
         </div>
         <div class="form-group">
-          <label>ยอดโอน (บาท) <span class="required-star">*</span></label>
-          <input type="number" id="inputAmount" placeholder="ยอดโอนตามในสลิป" min="0">
+          <label>ຍອດໂອນ (ບາດ) <span class="required-star">*</span></label>
+          <input type="number" id="inputAmount" placeholder="ຍອດໂອນຕາມໃນສະລິບ" min="0">
         </div>
       </div>
       <div class="form-group">
-        <label>วันโอนเงิน <span class="required-star">*</span></label>
+        <label>ວັນໂອນເງິນ <span class="required-star">*</span></label>
         <input type="date" id="inputTransferDate">
       </div>
       <div class="form-group">
-        <label>เพจขายของ <span class="required-star">*</span></label>
-        <input type="text" id="inputReporter" placeholder="ชื่อเพจ FB, IG, LINE">
-        <div class="field-hint">เช่น FB: Sneaker Shoes ราคาถูก หรือชื่อเพจคนขาย</div>
+        <label>ເພຈຂາຍສິນຄ້າ <span class="required-star">*</span></label>
+        <input type="text" id="inputReporter" placeholder="ຊື່ເພຈ FB, IG, LINE">
+        <div class="field-hint">ເຊັ່ນ FB: Sneaker Shoes ລາຄາຖືກ ຫຼື ຊື່ເພຈຄົນຂາຍ</div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>ประเภทการโกง</label>
+          <label>ປະເພດການໂກງ</label>
           <select id="inputTag">
-            <option>ไม่ส่งของ</option>
-            <option>หลอกโอนเงิน</option>
-            <option>ของไม่ตรงปก</option>
-            <option>หลอกลงทุน</option>
-            <option>อื่นๆ</option>
+            <option>ບໍ່ສົ່ງສິນຄ້າ</option>
+            <option>ຫລອກໂອນເງິນ</option>
+            <option>ສິນຄ້າບໍ່ຕົງປົກ</option>
+            <option>ຫລອກລົງທຶນ</option>
+            <option>ອື່ນໆ</option>
           </select>
         </div>
         <div class="form-group">
-          <label>จังหวัดของผู้แจ้ง</label>
-          <input type="text" id="inputProvince" placeholder="ไม่ระบุ">
+          <label>ແຂວງຂອງຜູ້ແຈ້ງ</label>
+          <input type="text" id="inputProvince" placeholder="ບໍ່ລະບຸ">
         </div>
       </div>
       <div class="form-group">
-        <label>รายละเอียดเพิ่มเติม <span class="required-star">*</span></label>
-        <div class="hint-note" style="margin-bottom:6px">บรรยายการโกงให้ละเอียด เช่น คนขายมีพฤติกรรมอย่างไร พร้อมใส่ชื่อและลิงก์เพจขายของ FB, LINE, IG</div>
-        <textarea id="inputDesc" rows="5" placeholder="อธิบายเหตุการณ์ที่เกิดขึ้น เช่น วันที่ จำนวนเงิน ลิงก์เพจ"></textarea>
-        <div class="field-error">กรุณากรอกรายละเอียดเหตุการณ์</div>
+        <label>ລາຍລະອຽດເພີ່ມເຕີມ <span class="required-star">*</span></label>
+        <div class="hint-note" style="margin-bottom:6px">ບັນລະຍາຍການໂກງໃຫ້ລະອຽດ ເຊັ່ນ ຄົນຂາຍມີພຶດຕິກຳແນວໃດ ພ້ອມໃສ່ຊື່ ແລະ ລິ້ງເພຈຂາຍສິນຄ້າ FB, LINE, IG</div>
+        <textarea id="inputDesc" rows="5" placeholder="ອະທິບາຍເຫດການທີ່ເກີດຂຶ້ນ ເຊັ່ນ ວັນທີ, ຈຳນວນເງິນ, ລິ້ງເພຈ"></textarea>
+        <div class="field-error">ກະລຸນາປ້ອນລາຍລະອຽດເຫດການ</div>
       </div>
 
       <!-- ส่วน 4: หลักฐานรูปภาพ -->
-      <div class="section-divider section-divider-alt">🖼️ หลักฐานรูปภาพ</div>
+      <div class="section-divider section-divider-alt">🖼️ ຫຼັກຖານຮູບພາບ</div>
       <div class="hint-note" style="margin-bottom:12px">
-        ⭐ แนบหลักฐานอย่างน้อย 5 รูป เลือกหลายรูปได้ในครั้งเดียว<br>
-        🔴 แชทไม่ครบ แชทไม่เรียง หรือรูปไม่ชัด โดนลบรายงานทิ้งทันที
+        ⭐ ແນບຫຼັກຖານຢ່າງໜ້ອຍ 5 ຮູບ ເລືອກຫຼາຍຮູບໄດ້ໃນຄັ້ງດຽວ<br>
+        🔴 ແຊດບໍ່ຄົບ ແຊດບໍ່ຮຽງ ຫຼື ຮູບບໍ່ຊັດ ຈະຖືກລຶບລາຍງານທັນທີ
       </div>
 
       <!-- Upload: หลักฐาน (หลายรูป) -->
       <div class="form-group">
-        <label>อัปโหลดรูปหลักฐาน (เลือกได้หลายรูป)</label>
+        <label>ອັບໂຫລດຮູບຫຼັກຖານ (ເລືອກໄດ້ຫຼາຍຮູບ)</label>
         <div class="upload-zone-sm" id="evidenceZone">
           <div class="upload-zone-icon">📂</div>
           <div>
-            <div class="upload-zone-text">คลิกหรือลากรูปมาวางที่นี่</div>
-            <div class="upload-zone-hint">JPG, PNG, WEBP • สูงสุด 10 MB ต่อรูป</div>
+            <div class="upload-zone-text">ກົດ ຫຼື ລາກຮູບມາວາງບ່ອນນີ້</div>
+            <div class="upload-zone-hint">JPG, PNG, WEBP • ສູງສຸດ 10 MB ຕໍ່ຮູບ</div>
           </div>
         </div>
         <input type="file" id="evidenceFiles" accept="image/*" multiple style="display:none">
         <div class="preview-grid" id="evidencePreview"></div>
         <div class="upload-count" id="evidenceCount"></div>
         <div class="form-group" style="margin-top:10px;margin-bottom:0">
-          <label>รายละเอียดรูป (ไม่บังคับ)</label>
-          <textarea id="evidenceNote" rows="2" placeholder="อธิบายเพิ่มเติมเกี่ยวกับรูปหลักฐาน เช่น แชทตอนไหน วันที่ใด (ถ้ามี)"></textarea>
+          <label>ລາຍລະອຽດຮູບ (ບໍ່ບັງຄັບ)</label>
+          <textarea id="evidenceNote" rows="2" placeholder="ອະທິບາຍເພີ່ມເຕີມກ່ຽວກັບຮູບຫຼັກຖານ ເຊັ່ນ ແຊດຕອນໃດ ວັນທີໃດ (ຖ້າມີ)"></textarea>
         </div>
       </div>
 
       <!-- Upload: สลิป (รูปเดียว) -->
       <div class="form-group">
-        <label>อัปโหลดสลิปโอนเงิน</label>
+        <label>ອັບໂຫລດສະລິບໂອນເງິນ</label>
         <div class="upload-zone-sm" id="slipZone">
           <div class="upload-zone-icon">🧾</div>
           <div>
-            <div class="upload-zone-text">คลิกหรือลากสลิปมาวางที่นี่</div>
-            <div class="upload-zone-hint">JPG, PNG • ไม่ต้องปิดชื่อหรือ QR</div>
+            <div class="upload-zone-text">ກົດ ຫຼື ລາກສະລິບມາວາງບ່ອນນີ້</div>
+            <div class="upload-zone-hint">JPG, PNG • ບໍ່ຕ້ອງປິດຊື່ ຫຼື QR</div>
           </div>
         </div>
         <input type="file" id="slipFile" accept="image/*" style="display:none">
         <div class="preview-grid" id="slipPreview"></div>
         <div class="form-group" style="margin-top:10px;margin-bottom:0">
-          <label>รายละเอียดสลิป (ไม่บังคับ)</label>
-          <textarea id="slipNote" rows="2" placeholder="หมายเหตุเกี่ยวกับสลิป เช่น โอนวันไหน เวลาใด (ถ้ามี)"></textarea>
+          <label>ລາຍລະອຽດສະລິບ (ບໍ່ບັງຄັບ)</label>
+          <textarea id="slipNote" rows="2" placeholder="ໝາຍເຫດກ່ຽວກັບສະລິບ ເຊັ່ນ ໂອນວັນໃດ ເວລາໃດ (ຖ້າມີ)"></textarea>
         </div>
       </div>
 
       <!-- ส่วน 5: ข้อมูลติดต่อกลับ -->
-      <div class="section-divider">📞 ข้อมูลติดต่อกลับ (ไม่บังคับ)</div>
-      <div class="hint-note" style="margin-bottom:10px">เพื่อประโยชน์ของคุณเอง ใส่รายละเอียดการติดต่อกลับ (โดยจะมีทันทีในระบบหลังบ้าน ไม่เผยแพร่สู่สาธารณะ)</div>
+      <div class="section-divider">📞 ຂໍ້ມູນຕິດຕໍ່ກັບ (ບໍ່ບັງຄັບ)</div>
+      <div class="hint-note" style="margin-bottom:10px">ເພື່ອປະໂຫຍດຂອງທ່ານເອງ ໃສ່ລາຍລະອຽດການຕິດຕໍ່ກັບ (ຈະມີໃນລະບົບຫຼັງບ້ານ ບໍ່ເຜີຍແຜ່ສູ່ສາທາລະນະ)</div>
       <div class="form-row">
         <div class="form-group">
-          <label>อีเมลของฉัน</label>
+          <label>ອີເມວຂອງຂ້ອຍ</label>
           <input type="email" id="inputEmail" placeholder="my_mail@gmail.com">
         </div>
         <div class="form-group">
-          <label>เบอร์มือถือ</label>
+          <label>ເບີໂທມືຖື</label>
           <input type="tel" id="inputPhone" placeholder="0891234567">
         </div>
       </div>
 
       <!-- Actions -->
       <div class="form-actions">
-        <a href="index.html" class="btn btn-secondary">ยกเลิก</a>
-        <button type="submit" class="btn btn-primary" id="submitBtn">💾 ส่งคำร้อง</button>
+        <a href="index.html" class="btn btn-secondary">ຍົກເລີກ</a>
+        <button type="submit" class="btn btn-primary" id="submitBtn">💾 ສົ່ງຄຳຮ້ອງ</button>
       </div>
 
     </form>
   </div>
 
   <footer class="site-footer">
-    ⚠️ ข้อมูลในเว็บนี้มาจากการแจ้งของผู้ใช้ กรุณาตรวจสอบข้อมูลเพิ่มเติมก่อนตัดสินใจ
+    ⚠️ ຂໍ້ມູນໃນເວັບນີ້ມາຈາກການແຈ້ງຂອງຜູ້ໃຊ້ ກະລຸນາກວດສອບຂໍ້ມູນເພີ່ມເຕີມກ່ອນຕັດສິນໃຈ
   </footer>
 
 </div>
@@ -477,7 +477,7 @@ function setupZone(zoneId, inputId, previewId, countId, multi) {
 
 function handleFiles(files, fileList, preview, countEl, multi) {
   const allowed = files.filter(f => f.type.startsWith('image/'));
-  if (allowed.length !== files.length) toast('เฉพาะไฟล์รูปภาพเท่านั้น (JPG, PNG, WEBP)', 'error');
+  if (allowed.length !== files.length) toast('ສະເພາະໄຟລ໌ຮູບພາບເທົ່ານັ້ນ (JPG, PNG, WEBP)', 'error');
 
   if (!multi) {
     // Replace single file
@@ -486,13 +486,13 @@ function handleFiles(files, fileList, preview, countEl, multi) {
   }
 
   allowed.forEach(file => {
-    if (file.size > 10 * 1024 * 1024) { toast(`${file.name} ขนาดเกิน 10MB`, 'error'); return; }
+    if (file.size > 10 * 1024 * 1024) { toast(`${file.name} ຂະໜາດເກີນ 10MB`, 'error'); return; }
     if (!multi && fileList.length >= 1) return; // single only
     fileList.push(file);
     addPreview(file, fileList, preview, countEl);
   });
 
-  if (countEl) countEl.textContent = fileList.length > 0 ? `เลือกแล้ว ${fileList.length} รูป` : '';
+  if (countEl) countEl.textContent = fileList.length > 0 ? `ເລືອກແລ້ວ ${fileList.length} ຮູບ` : '';
 }
 
 function addPreview(file, fileList, preview, countEl) {
@@ -502,13 +502,13 @@ function addPreview(file, fileList, preview, countEl) {
     item.className = 'preview-item preview-item-sm';
     item.innerHTML = `
       <img src="${e.target.result}" alt="preview">
-      <button type="button" class="remove-btn" title="ลบรูปนี้">✕</button>
+      <button type="button" class="remove-btn" title="ລຶບຮູບນີ້">✕</button>
       <div class="upload-progress"><div class="upload-bar"></div></div>`;
     item.querySelector('.remove-btn').addEventListener('click', () => {
       const idx = fileList.indexOf(file);
       if (idx > -1) fileList.splice(idx, 1);
       item.remove();
-      if (countEl) countEl.textContent = fileList.length > 0 ? `เลือกแล้ว ${fileList.length} รูป` : '';
+      if (countEl) countEl.textContent = fileList.length > 0 ? `ເລືອກແລ້ວ ${fileList.length} ຮູບ` : '';
     });
     preview.appendChild(item);
   };
@@ -533,17 +533,17 @@ document.getElementById('addBankBtn').addEventListener('click', () => {
   row.className = 'bank-row';
   row.innerHTML = `
     <div class="form-group">
-      <label>บัญชีเพิ่มเติม</label>
-      <input type="text" placeholder="ตัวเลขเท่านั้น">
+      <label>ບັນຊີເພີ່ມເຕີມ</label>
+      <input type="text" placeholder="ຕົວເລກເທົ່ານັ້ນ">
     </div>
     <div class="form-group">
-      <label>เลือกธนาคาร</label>
+      <label>ເລືອກທະນາຄານ</label>
       <select>
-        <option value="">เลือกธนาคาร</option>
-        <option>ธ.กรุงเทพ (BBL)</option><option>ธ.กสิกรไทย (KBANK)</option>
-        <option>ธ.กรุงไทย (KTB)</option><option>ธ.ทหารไทยธนชาต (TTB)</option>
-        <option>ธ.ไทยพาณิชย์ (SCB)</option><option>ธ.กรุงศรีอยุธยา (BAY)</option>
-        <option>ธ.ออมสิน</option><option>พร้อมเพย์ / PromptPay</option><option>อื่นๆ</option>
+        <option value="">ເລືອກທະນາຄານ</option>
+        <option>ທ.ກຣຸງເທບ (BBL)</option><option>ທ.ກະສິກອນໄທ (KBANK)</option>
+        <option>ທ.ກຣຸງໄທ (KTB)</option><option>ທ.ທະຫານໄທທະນະຊາດ (TTB)</option>
+        <option>ທ.ໄທພານິດ (SCB)</option><option>ທ.ກຣຸງສີອະຍຸທະຢາ (BAY)</option>
+        <option>ທ.ອອມສິນ</option><option>ພຣ້ອມເພ / PromptPay</option><option>ອື່ນໆ</option>
       </select>
     </div>
     <button type="button" onclick="this.closest('.bank-row').remove()"
@@ -555,7 +555,7 @@ document.getElementById('addBankBtn').addEventListener('click', () => {
 /* ===== Form submit ===== */
 document.getElementById('entryForm').addEventListener('submit', async e => {
   e.preventDefault();
-  if (!currentUser) { toast('กรุณาเข้าสู่ระบบก่อนส่งข้อมูล', 'error'); return; }
+  if (!currentUser) { toast('ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນສົ່ງຂໍ້ມູນ', 'error'); return; }
 
   // Validate
   let valid = true;
@@ -564,14 +564,14 @@ document.getElementById('entryForm').addEventListener('submit', async e => {
   document.querySelectorAll('.form-group.error').forEach(g => g.classList.remove('error'));
   if (!name) { document.getElementById('inputName').closest('.form-group').classList.add('error'); valid = false; }
   if (!desc) { document.getElementById('inputDesc').closest('.form-group').classList.add('error'); valid = false; }
-  if (!valid) { toast('กรุณากรอกข้อมูลที่จำเป็นให้ครบ', 'error'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (!valid) { toast('ກະລຸນາປ້ອນຂໍ້ມູນທີ່ຈຳເປັນໃຫ້ຄົບ', 'error'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
 
   // Show upload overlay
   const uploadOverlay = document.getElementById('uploadOverlay');
   const progressText = document.getElementById('uploadProgressText');
   const submitBtn = document.getElementById('submitBtn');
   submitBtn.classList.add('loading');
-  submitBtn.innerHTML = '<span class="spinner-inline"></span>กำลังส่ง...';
+  submitBtn.innerHTML = '<span class="spinner-inline"></span>ກຳລັງສົ່ງ...';
 
   // Upload images
   const ts = Date.now();
@@ -592,10 +592,10 @@ document.getElementById('entryForm').addEventListener('submit', async e => {
         const url = await uploadFile(file, `evidence/${currentUser.uid}/${ts}_ev${i}.${ext}`);
         evidenceUrls.push(url);
       } catch (err) {
-        toast(`อัปโหลดรูปหลักฐานที่ ${i+1} ล้มเหลว`, 'error');
+        toast(`ອັບໂຫລດຮູບຫຼັກຖານທີ ${i+1} ລົ້ມເຫລວ`, 'error');
       }
       done++;
-      progressText.textContent = `${done} / ${totalFiles} รูป`;
+      progressText.textContent = `${done} / ${totalFiles} ຮູບ`;
     }
 
     // Upload slip
@@ -605,10 +605,10 @@ document.getElementById('entryForm').addEventListener('submit', async e => {
       try {
         slipUrl = await uploadFile(file, `slips/${currentUser.uid}/${ts}_slip.${ext}`);
       } catch (err) {
-        toast('อัปโหลดสลิปล้มเหลว', 'error');
+        toast('ອັບໂຫລດສະລິບລົ້ມເຫລວ', 'error');
       }
       done++;
-      progressText.textContent = `${done} / ${totalFiles} รูป`;
+      progressText.textContent = `${done} / ${totalFiles} ຮູບ`;
     }
 
     uploadOverlay.classList.remove('show');
@@ -625,7 +625,7 @@ document.getElementById('entryForm').addEventListener('submit', async e => {
     amount: document.getElementById('inputAmount').value.trim(),
     transferDate: document.getElementById('inputTransferDate').value,
     tag: document.getElementById('inputTag').value,
-    reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุ',
+    reporter: document.getElementById('inputReporter').value.trim() || 'ບໍ່ລະບຸ',
     province: document.getElementById('inputProvince').value.trim(),
     desc,
     evidenceUrls,
@@ -646,9 +646,9 @@ document.getElementById('entryForm').addEventListener('submit', async e => {
     document.getElementById('successScreen').classList.add('show');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (err) {
-    toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+    toast('ເກີດຂໍ້ຜິດພາດ: ' + err.message, 'error');
     submitBtn.classList.remove('loading');
-    submitBtn.innerHTML = '💾 ส่งคำร้อง';
+    submitBtn.innerHTML = '💾 ສົ່ງຄຳຮ້ອງ';
   }
 });
 

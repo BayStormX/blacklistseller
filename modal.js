@@ -1,6 +1,6 @@
 /* ===================================================
    modal.js
-   จัดการ modal เพิ่ม/แก้ไขรายชื่อแบล็กลิสต์
+   ຈັດການ modal ເພີ່ມ/ແກ້ໄຂລາຍຊື່ແບລັກລິດ
    =================================================== */
 
 const Modal = (() => {
@@ -46,7 +46,7 @@ const Modal = (() => {
   function openForCreate() {
     editingId = null;
     tempImage = null;
-    titleEl.textContent = 'แจ้งแบล็กลิสต์';
+    titleEl.textContent = 'ແຈ້ງແບລັກລິດ';
     form.reset();
     clearErrors();
     resetImagePreview();
@@ -59,7 +59,7 @@ const Modal = (() => {
     if (!entry) return;
     editingId = id;
     tempImage = entry.imageData || null;
-    titleEl.textContent = 'แก้ไขข้อมูล';
+    titleEl.textContent = 'ແກ້ໄຂຂໍ້ມູນ';
     document.getElementById('inputName').value = entry.name;
     document.getElementById('inputContact').value = entry.contact;
     document.getElementById('inputTag').value = entry.tag;
@@ -122,7 +122,7 @@ const Modal = (() => {
   function onSubmit(e) {
     e.preventDefault();
     if (!validate()) {
-      Toast.error('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน');
+      Toast.error('ກະລຸນາໃສ່ຂໍ້ມູນທີ່ຈຳເປັນໃຫ້ຄົບ');
       return;
     }
 
@@ -132,16 +132,16 @@ const Modal = (() => {
       tag: document.getElementById('inputTag').value,
       desc: document.getElementById('inputDesc').value.trim(),
       evidenceUrl: document.getElementById('inputEvidence').value.trim(),
-      reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุชื่อ',
+      reporter: document.getElementById('inputReporter').value.trim() || 'ບໍ່ລະບຸຊື່',
       imageData: tempImage || ''
     };
 
     if (editingId) {
       Storage.update(editingId, data);
-      Toast.success('แก้ไขข้อมูลเรียบร้อยแล้ว');
+      Toast.success('ແກ້ໄຂຂໍ້ມູນສຳເລັດ');
     } else {
       Storage.add(data);
-      Toast.success('บันทึกรายชื่อเรียบร้อยแล้ว');
+      Toast.success('ບັນທຶກລາຍຊື່ສຳເລັດ');
     }
 
     close();

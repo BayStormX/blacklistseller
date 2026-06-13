@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Backlist เช็คก่อนโอน</title>
+<title>Backlist ກວດກ່ອນໂອນ</title>
 <style>
 :root {
   --mint-50: #EAFBF4; --mint-100: #DFF6EC; --mint-200: #BFEFDD;
@@ -208,7 +208,7 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 <!-- Loading -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <div>กำลังโหลด...</div>
+  <div>ກຳລັງໂຫລດ...</div>
 </div>
 
 <!-- Topbar -->
@@ -217,20 +217,20 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
     <div class="brand">
       <div class="brand-icon">🛡️</div>
       <div>
-        Backlist เช็คก่อนโอน
-        <span class="brand-tagline">รวบรวมรายชื่อที่ถูกแจ้งว่าฉ้อโกง เพื่อความปลอดภัยในการซื้อขาย</span>
+        Backlist ກວດກ່ອນໂອນ
+        <span class="brand-tagline">ລວບລວມລາຍຊື່ທີ່ຖືກແຈ້ງວ່າໂກງ ເພື່ອຄວາມປອດໄພໃນການຊື້ຂາຍ</span>
       </div>
     </div>
     <div class="topbar-nav">
-      <!-- ไม่ได้ login -->
-      <button id="topbarLoginBtn" class="btn btn-light btn-sm">🔑 เข้าสู่ระบบ</button>
-      <!-- login แล้ว -->
+      <!-- ຍັງບໍ່ໄດ້ເຂົ້າລະບົບ -->
+      <button id="topbarLoginBtn" class="btn btn-light btn-sm">🔑 ເຂົ້າສູ່ລະບົບ</button>
+      <!-- ເຂົ້າລະບົບແລ້ວ -->
       <div class="inbox-btn-wrap" id="inboxBtnWrap" style="display:none">
-        <button id="inboxBtn" class="btn btn-light btn-sm">📬 กล่องจดหมาย</button>
+        <button id="inboxBtn" class="btn btn-light btn-sm">📬 ກ່ອງຈົດໝາຍ</button>
         <span class="inbox-badge" id="inboxBadge" style="display:none">0</span>
       </div>
       <div class="user-pill" id="userPill" style="display:none">👤 <span id="userDisplayName"></span></div>
-      <button id="logoutBtn" class="btn btn-light btn-sm" style="display:none">ออกจากระบบ</button>
+      <button id="logoutBtn" class="btn btn-light btn-sm" style="display:none">ອອກຈາກລະບົບ</button>
     </div>
   </div>
 </header>
@@ -241,38 +241,38 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
   <div class="search-bar">
     <div class="input-wrap">
       <span class="search-icon">🔎</span>
-      <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, เบอร์โทร, เลขบัญชี, Line ID...">
+      <input type="text" id="searchInput" placeholder="ຄົ້ນຫາຊື່, ເບີໂທ, ເລກບັນຊີ, Line ID...">
     </div>
-    <button id="addEntryBtn" class="btn btn-primary">＋ แจ้งแบล็กลิสต์</button>
+    <button id="addEntryBtn" class="btn btn-primary">＋ ແຈ້ງແບລັກລິດ</button>
   </div>
 
   <!-- Filter -->
   <div class="filter-bar">
-    <button class="filter-chip active" data-tag="all">ทั้งหมด</button>
-    <button class="filter-chip" data-tag="ไม่ส่งของ">ไม่ส่งของ</button>
-    <button class="filter-chip" data-tag="หลอกโอนเงิน">หลอกโอนเงิน</button>
-    <button class="filter-chip" data-tag="ของไม่ตรงปก">ของไม่ตรงปก</button>
-    <button class="filter-chip" data-tag="หลอกลงทุน">หลอกลงทุน</button>
-    <button class="filter-chip" data-tag="อื่นๆ">อื่นๆ</button>
+    <button class="filter-chip active" data-tag="all">ທັງໝົດ</button>
+    <button class="filter-chip" data-tag="ບໍ່ສົ່ງສິນຄ້າ">ບໍ່ສົ່ງສິນຄ້າ</button>
+    <button class="filter-chip" data-tag="ຫລອກໂອນເງິນ">ຫລອກໂອນເງິນ</button>
+    <button class="filter-chip" data-tag="ສິນຄ້າບໍ່ຕົງປົກ">ສິນຄ້າບໍ່ຕົງປົກ</button>
+    <button class="filter-chip" data-tag="ຫລອກລົງທຶນ">ຫລອກລົງທຶນ</button>
+    <button class="filter-chip" data-tag="ອື່ນໆ">ອື່ນໆ</button>
   </div>
 
   <!-- Stats -->
   <div class="stats-grid">
-    <div class="stat-box"><div class="stat-num" id="totalCount">0</div><div class="stat-label">รายชื่อทั้งหมด</div></div>
-    <div class="stat-box alt-coral"><div class="stat-num" id="todayCount">0</div><div class="stat-label">แจ้งใหม่วันนี้</div></div>
-    <div class="stat-box alt-pink"><div class="stat-num" id="noDeliveryCount">0</div><div class="stat-label">เคสไม่ส่งของ</div></div>
-    <div class="stat-box alt-blue"><div class="stat-num" id="investCount">0</div><div class="stat-label">เคสหลอกลงทุน</div></div>
+    <div class="stat-box"><div class="stat-num" id="totalCount">0</div><div class="stat-label">ລາຍຊື່ທັງໝົດ</div></div>
+    <div class="stat-box alt-coral"><div class="stat-num" id="todayCount">0</div><div class="stat-label">ແຈ້ງໃໝ່ມື້ນີ້</div></div>
+    <div class="stat-box alt-pink"><div class="stat-num" id="noDeliveryCount">0</div><div class="stat-label">ເຄດບໍ່ສົ່ງສິນຄ້າ</div></div>
+    <div class="stat-box alt-blue"><div class="stat-num" id="investCount">0</div><div class="stat-label">ເຄດຫລອກລົງທຶນ</div></div>
   </div>
 
   <!-- pendingContainer hidden (moved to inbox modal) -->
   <div id="pendingContainer" style="display:none"></div>
 
   <!-- List -->
-  <div class="section-title">รายชื่อแบล็กลิสต์ <span class="count-badge" id="listCount">0</span></div>
+  <div class="section-title">ລາຍຊື່ແບລັກລິດ <span class="count-badge" id="listCount">0</span></div>
   <div id="listContainer"></div>
 
   <footer class="site-footer">
-    ⚠️ ข้อมูลในเว็บนี้มาจากการแจ้งของผู้ใช้ กรุณาตรวจสอบข้อมูลเพิ่มเติมก่อนตัดสินใจ
+    ⚠️ ຂໍ້ມູນໃນເວັບນີ້ມາຈາກການແຈ້ງຂອງຜູ້ໃຊ້ ກະລຸນາກວດສອບຂໍ້ມູນເພີ່ມເຕີມກ່ອນຕັດສິນໃຈ
   </footer>
 </div>
 
@@ -280,25 +280,25 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 <div class="modal-overlay" id="loginGateOverlay">
   <div class="modal" style="max-width:380px">
     <div class="modal-header">
-      <h3>🔑 เข้าสู่ระบบ</h3>
+      <h3>🔑 ເຂົ້າສູ່ລະບົບ</h3>
       <button class="modal-close" id="loginGateClose">✕</button>
     </div>
-    <p style="font-size:13px;color:var(--text-muted);margin-top:-6px">กรุณาเข้าสู่ระบบก่อนใช้งานฟีเจอร์นี้</p>
+    <p style="font-size:13px;color:var(--text-muted);margin-top:-6px">ກະລຸນາເຂົ້າສູ່ລະບົບກ່ອນໃຊ້ງານ</p>
     <div id="loginGateError" style="background:var(--coral-100);color:var(--coral-700);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;font-weight:600;display:none"></div>
     <div class="form-group" style="margin-bottom:0">
-      <label>อีเมล</label>
+      <label>ອີເມວ</label>
       <input type="email" id="lgEmail" placeholder="your@email.com" autocomplete="email">
     </div>
     <div class="form-group" style="margin-bottom:0">
-      <label>รหัสผ่าน</label>
+      <label>ລະຫັດຜ່ານ</label>
       <div style="position:relative">
-        <input type="password" id="lgPassword" placeholder="รหัสผ่าน" style="padding-right:44px" autocomplete="current-password">
+        <input type="password" id="lgPassword" placeholder="ລະຫັດຜ່ານ" style="padding-right:44px" autocomplete="current-password">
         <button type="button" id="lgTogglePw" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:16px;color:var(--text-muted);cursor:pointer">👁</button>
       </div>
     </div>
-    <button class="btn btn-primary" id="loginGateSubmit" style="width:100%;padding:12px;font-size:15px">เข้าสู่ระบบ</button>
+    <button class="btn btn-primary" id="loginGateSubmit" style="width:100%;padding:12px;font-size:15px">ເຂົ້າສູ່ລະບົບ</button>
     <div style="text-align:center;font-size:13px;color:var(--text-muted)">
-      ยังไม่มีบัญชี? <a href="#" id="switchToRegister">สมัครสมาชิก</a>
+      ຍັງບໍ່ມີບັນຊີ? <a href="#" id="switchToRegister">ສະໝັກສະມາຊິກ</a>
     </div>
   </div>
 </div>
@@ -307,25 +307,25 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 <div class="modal-overlay" id="registerOverlay">
   <div class="modal" style="max-width:380px">
     <div class="modal-header">
-      <h3>📝 สมัครสมาชิก</h3>
+      <h3>📝 ສະໝັກສະມາຊິກ</h3>
       <button class="modal-close" id="registerClose">✕</button>
     </div>
     <div id="registerError" style="background:var(--coral-100);color:var(--coral-700);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;font-weight:600;display:none"></div>
     <div class="form-group" style="margin-bottom:0">
-      <label>ชื่อที่แสดง</label>
-      <input type="text" id="regName" placeholder="ชื่อของคุณ">
+      <label>ຊື່ທີ່ສະແດງ</label>
+      <input type="text" id="regName" placeholder="ຊື່ຂອງທ່ານ">
     </div>
     <div class="form-group" style="margin-bottom:0">
-      <label>อีเมล</label>
+      <label>ອີເມວ</label>
       <input type="email" id="regEmail" placeholder="your@email.com">
     </div>
     <div class="form-group" style="margin-bottom:0">
-      <label>รหัสผ่าน (อย่างน้อย 6 ตัว)</label>
-      <input type="password" id="regPassword" placeholder="รหัสผ่าน">
+      <label>ລະຫັດຜ່ານ (ຢ່າງໜ້ອຍ 6 ຕົວ)</label>
+      <input type="password" id="regPassword" placeholder="ລະຫັດຜ່ານ">
     </div>
-    <button class="btn btn-primary" id="registerSubmit" style="width:100%;padding:12px;font-size:15px">สมัครสมาชิก</button>
+    <button class="btn btn-primary" id="registerSubmit" style="width:100%;padding:12px;font-size:15px">ສະໝັກສະມາຊິກ</button>
     <div style="text-align:center;font-size:13px;color:var(--text-muted)">
-      มีบัญชีแล้ว? <a href="#" id="switchToLogin">เข้าสู่ระบบ</a>
+      ມີບັນຊີແລ້ວ? <a href="#" id="switchToLogin">ເຂົ້າສູ່ລະບົບ</a>
     </div>
   </div>
 </div>
@@ -334,156 +334,156 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 <div class="report-modal-overlay" id="entryOverlay">
   <div class="report-modal">
     <div class="report-modal-header">
-      <h3 id="entryModalTitle">📋 แจ้งแบล็กลิสต์</h3>
+      <h3 id="entryModalTitle">📋 ແຈ້ງແບລັກລິດ</h3>
       <button class="modal-close" id="entryClose">✕</button>
     </div>
     <form id="entryForm">
     <div class="report-modal-body">
 
-      <!-- ส่วน 1: ข้อมูลผู้ขาย -->
-      <div class="section-divider">👤 ข้อมูลผู้ขาย</div>
+      <!-- ส่วน 1: ຂໍ້ມູນຜູ້ຂາຍ -->
+      <div class="section-divider">👤 ຂໍ້ມູນຜູ້ຂາຍ</div>
       <div class="warn-box">
-        เพื่อป้องกันผู้บริสุทธิ์เสียหาย หากไม่แน่ใจให้ใส่ว่า "ไม่ทราบ"<br>
-        🔴 ใส่ชื่อตามบัญชีที่โอนเงินไปเท่านั้น ไม่ใช่ชื่อเพจ หรือชื่อประชาชนที่ถูกอ้าง
+        ເພື່ອປ້ອງກັນຜູ້ບໍລິສຸດ ຖ້າບໍ່ແນ່ໃຈໃຫ້ໃສ່ "ບໍ່ຮູ້"<br>
+        🔴 ໃສ່ຊື່ຕາມບັນຊີທີ່ໂອນເງິນໄປເທົ່ານັ້ນ ບໍ່ແມ່ນຊື່ເພດ
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>ชื่อคนขาย (ภาษาไทย) <span class="required-star">*</span></label>
-          <input type="text" id="inputName" placeholder="ชื่อบัญชีคนขาย (ไม่ต้องมีนาง นางสาว)">
-          <div class="field-error">กรุณากรอกข้อมูลในช่องนี้</div>
+          <label>ຊື່ຜູ້ຂາຍ <span class="required-star">*</span></label>
+          <input type="text" id="inputName" placeholder="ຊື່ບັນຊີຜູ້ຂາຍ">
+          <div class="field-error">ກະລຸນາໃສ່ຂໍ້ມູນໃນຊ່ອງນີ້</div>
         </div>
         <div class="form-group">
-          <label>นามสกุล (ภาษาไทย) <span class="required-star">*</span></label>
-          <input type="text" id="inputLastname" placeholder="นามสกุลบัญชีคนขาย">
+          <label>ນາມສະກຸນ <span class="required-star">*</span></label>
+          <input type="text" id="inputLastname" placeholder="ນາມສະກຸນບັນຊີຜູ້ຂາຍ">
         </div>
       </div>
       <div class="form-group">
-        <label>เลขบัตรประชาชนคนขาย</label>
-        <input type="text" id="inputNationalId" placeholder="ไม่รู้ไม่ต้องใส่" maxlength="13">
-        <div class="hint-note">ใส่เฉพาะตัวเลข 13 หลัก หากไม่ทราบให้เว้นว่าง</div>
+        <label>ເລກບັດປະຊາຊົນຜູ້ຂາຍ</label>
+        <input type="text" id="inputNationalId" placeholder="ບໍ່ຮູ້ບໍ່ຕ້ອງໃສ່" maxlength="13">
+        <div class="hint-note">ໃສ່ສະເພາະຕົວເລກ 13 ຕົວ ຖ້າບໍ່ຮູ້ໃຫ້ຫວ່າງໄວ້</div>
       </div>
 
-      <!-- ส่วน 2: ข้อมูลบัญชีธนาคาร -->
-      <div class="section-divider section-divider-alt">🏦 ข้อมูลบัญชีธนาคาร</div>
-      <div class="hint-note" style="margin-bottom:10px">บัญชีธนาคารคนขาย • หากไม่รู้เลขบัญชี ให้กรอก 0000000</div>
+      <!-- ส่วน 2: ຂໍ້ມູນບັນຊີທະນາຄານ -->
+      <div class="section-divider section-divider-alt">🏦 ຂໍ້ມູນບັນຊີທະນາຄານ</div>
+      <div class="hint-note" style="margin-bottom:10px">ບັນຊີທະນາຄານຜູ້ຂາຍ • ຖ້າບໍ່ຮູ້ເລກບັນຊີ ໃຫ້ໃສ່ 0000000</div>
       <div id="bankRows">
         <div class="bank-row">
           <div class="form-group">
-            <label>บัญชีคนขาย <span class="required-star">*</span></label>
-            <input type="text" id="inputContact" placeholder="ตัวเลขเท่านั้น">
+            <label>ບັນຊີຜູ້ຂາຍ <span class="required-star">*</span></label>
+            <input type="text" id="inputContact" placeholder="ຕົວເລກເທົ່ານັ້ນ">
           </div>
           <div class="form-group">
-            <label>เลือกธนาคาร <span class="required-star">*</span></label>
+            <label>ເລືອກທະນາຄານ <span class="required-star">*</span></label>
             <select id="inputBank">
-              <option value="">เลือกธนาคาร</option>
-              <option>ธ.กรุงเทพ (BBL)</option>
-              <option>ธ.กสิกรไทย (KBANK)</option>
-              <option>ธ.กรุงไทย (KTB)</option>
-              <option>ธ.ทหารไทยธนชาต (TTB)</option>
-              <option>ธ.ไทยพาณิชย์ (SCB)</option>
-              <option>ธ.กรุงศรีอยุธยา (BAY)</option>
-              <option>ธ.ออมสิน</option>
-              <option>ธ.อาคารสงเคราะห์ (GHB)</option>
-              <option>ธ.เพื่อการเกษตร (ธ.ก.ส.)</option>
-              <option>ธ.ซีไอเอ็มบีไทย</option>
-              <option>พร้อมเพย์ / PromptPay</option>
-              <option>อื่นๆ</option>
+              <option value="">ເລືອກທະນາຄານ</option>
+              <option>ທ.ກຣຸງເທບ (BBL)</option>
+              <option>ທ.ກະສິກອນ (KBANK)</option>
+              <option>ທ.ກຣຸງໄທ (KTB)</option>
+              <option>ທ.ທະຫານໄທ (TTB)</option>
+              <option>ທ.ໄທພານິດ (SCB)</option>
+              <option>ທ.ກຣຸງສີ (BAY)</option>
+              <option>ທ.ອອມສິນ</option>
+              <option>ທ.ທີ່ຢູ່ອາໄສ (GHB)</option>
+              <option>ທ.ເພື່ອກະສິກຳ</option>
+              <option>ທ.ຊີໄອເອັມບີ</option>
+              <option>ພຣ້ອມເພ / PromptPay</option>
+              <option>ອື່ນໆ</option>
             </select>
           </div>
         </div>
       </div>
-      <button type="button" class="btn-add-bank" id="addBankBtn">+ เพิ่ม</button>
+      <button type="button" class="btn-add-bank" id="addBankBtn">+ ເພີ່ມ</button>
 
-      <!-- ส่วน 3: รายละเอียดเรื่องยาม -->
-      <div class="section-divider" style="margin-top:20px">📦 รายละเอียดเรื่องยาม</div>
+      <!-- ส่วน 3: ລາຍລະອຽດເຫດການ -->
+      <div class="section-divider" style="margin-top:20px">📦 ລາຍລະອຽດເຫດການ</div>
       <div class="warn-box red">
-        ❌ ไม่รับรายงานเกี่ยวกับ แชร์ ยืมเงิน/ออมเงิน ยกเว้นตามเงื่อนไข <a href="#" style="color:var(--coral-700);font-weight:700">เงื่อนไข</a>
+        ❌ ບໍ່ຮັບລາຍງານກ່ຽວກັບ ຢືມເງິນ/ອອມເງິນ ຍົກເວັ້ນຕາມເງື່ອນໄຂ <a href="#" style="color:var(--coral-700);font-weight:700">ເງື່ອນໄຂ</a>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>สินค้าที่สั่งซื้อ <span class="required-star">*</span></label>
-          <input type="text" id="inputProduct" placeholder="สินค้า">
+          <label>ສິນຄ້າທີ່ສັ່ງຊື້ <span class="required-star">*</span></label>
+          <input type="text" id="inputProduct" placeholder="ສິນຄ້າ">
         </div>
         <div class="form-group">
-          <label>ยอดโอน <span class="required-star">*</span></label>
-          <input type="number" id="inputAmount" placeholder="ยอดโอนตามในสลิป" min="0">
+          <label>ຍອດໂອນ <span class="required-star">*</span></label>
+          <input type="number" id="inputAmount" placeholder="ຍອດໂອນຕາມໃນສລິບ" min="0">
         </div>
       </div>
       <div class="form-group">
-        <label>วันโอนเงิน <span class="required-star">*</span></label>
+        <label>ວັນໂອນເງິນ <span class="required-star">*</span></label>
         <input type="date" id="inputTransferDate">
       </div>
       <div class="form-group">
-        <label>เพจขายของ <span class="required-star">*</span></label>
-        <input type="text" id="inputReporter" placeholder="ชื่อเพจ FB, IG, LINE">
-        <div class="hint-note">เช่น FB: Sneaker Shoes ราคาถูก หรือชื่อเพจคนขาย</div>
+        <label>ຮ້ານຂາຍສິນຄ້າ <span class="required-star">*</span></label>
+        <input type="text" id="inputReporter" placeholder="ຊື່ເພດ FB, IG, LINE">
+        <div class="hint-note">ເຊັ່ນ FB: ຊື່ຮ້ານ ຫຼື ຊື່ເພດຜູ້ຂາຍ</div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>ประเภทการโกง</label>
+          <label>ປະເພດການໂກງ</label>
           <select id="inputTag">
-            <option>ไม่ส่งของ</option>
-            <option>หลอกโอนเงิน</option>
-            <option>ของไม่ตรงปก</option>
-            <option>หลอกลงทุน</option>
-            <option>อื่นๆ</option>
+            <option>ບໍ່ສົ່ງສິນຄ້າ</option>
+            <option>ຫລອກໂອນເງິນ</option>
+            <option>ສິນຄ້າບໍ່ຕົງປົກ</option>
+            <option>ຫລອກລົງທຶນ</option>
+            <option>ອື່ນໆ</option>
           </select>
         </div>
         <div class="form-group">
-          <label>จังหวัดของคนสร้างรายงาน</label>
-          <input type="text" id="inputProvince" placeholder="ไม่ระบุ">
+          <label>ແຂວງຂອງຜູ້ສ້າງລາຍງານ</label>
+          <input type="text" id="inputProvince" placeholder="ບໍ່ລະບຸ">
         </div>
       </div>
       <div class="form-group">
-        <label>รายละเอียดเพิ่มเติม <span class="required-star">*</span></label>
-        <div class="hint-note" style="margin-bottom:6px">บรรยายการโกงให้ละเอียด เช่น คนขายมีพฤติกรรมอย่างไร พร้อมใส่ชื่อและลิงก์เพจขายของ FB,LINE,IG</div>
-        <textarea id="inputDesc" rows="5" placeholder="อธิบายเหตุการณ์ที่เกิดขึ้น เช่น วันที่ จำนวนเงิน ลิงก์เพจ"></textarea>
-        <div class="field-error">กรุณากรอกรายละเอียดเหตุการณ์</div>
+        <label>ລາຍລະອຽດເພີ່ມເຕີມ <span class="required-star">*</span></label>
+        <div class="hint-note" style="margin-bottom:6px">ອະທິບາຍການໂກງໃຫ້ລະອຽດ ເຊັ່ນ ຜູ້ຂາຍມີພຶດຕິກຳແນວໃດ ພ້ອມໃສ່ຊື່ ແລະ ລິ້ງ FB,LINE,IG</div>
+        <textarea id="inputDesc" rows="5" placeholder="ອະທິບາຍເຫດການທີ່ເກີດຂຶ້ນ ເຊັ່ນ ວັນທີ ຈຳນວນເງິນ ລິ້ງເພດ"></textarea>
+        <div class="field-error">ກະລຸນາໃສ່ລາຍລະອຽດເຫດການ</div>
       </div>
 
-      <!-- ส่วน 4: หลักฐานรูปภาพ -->
-      <div class="section-divider section-divider-alt">🖼️ หลักฐานรูปภาพ</div>
+      <!-- ส่วน 4: ຫຼັກຖານຮູບພາບ -->
+      <div class="section-divider section-divider-alt">🖼️ ຫຼັກຖານຮູບພາບ</div>
       <div class="hint-note" style="margin-bottom:10px">
-        ⭐ หลักฐานแขกตกลนาอย่างน้อย 5 รูป เลือกหลายรูปที่เดียว แล้วค่อยกดส่ง<br>
-        🔴 แชทไม่ตรบ แชทไม่เรียง หรือลงรูปประมาณ โดนลบรายงานทิ้งทันที
+        ⭐ ຫຼັກຖານຢ່າງໜ້ອຍ 5 ຮູບ ເລືອກຫຼາຍຮູບໄດ້ເລີຍ ແລ້ວຄ່ອຍກົດສົ່ງ<br>
+        🔴 ແຊດບໍ່ຄົບ ແຊດບໍ່ຮຽງ ຫຼືລົງຮູບບໍ່ຖືກ ຈະຖືກລຶບທັນທີ
       </div>
       <div class="form-group">
-        <label>ลิงก์หลักฐาน / โฟลเดอร์รูปภาพ</label>
-        <input type="text" id="inputEvidence" placeholder="เช่น ลิงก์ Google Drive, Imgur, หรือ URL รูปภาพ">
-        <div class="hint-note">แนะนำให้แนบลิงก์จากบริการฝากไฟล์ที่ปลอดภัย (Google Drive, Dropbox)</div>
+        <label>ລິ້ງຫຼັກຖານ / ໂຟລເດີຮູບພາບ</label>
+        <input type="text" id="inputEvidence" placeholder="ເຊັ່ນ ລິ້ງ Google Drive, Imgur, ຫຼື URL ຮູບພາບ">
+        <div class="hint-note">ແນະນຳໃຫ້ແນບລິ້ງຈາກບໍລິການຝາກໄຟລ໌ (Google Drive, Dropbox)</div>
       </div>
       <div class="form-group">
-        <label>แนบรูปหลักฐาน (ไม่บังคับ)</label>
+        <label>ແນບຮູບຫຼັກຖານ (ບໍ່ບັງຄັບ)</label>
         <div style="display:flex;align-items:center;gap:10px">
           <input type="file" id="inputImage" accept="image/*" style="flex:1">
-          <img id="imagePreview" alt="ตัวอย่างรูป" style="display:none;width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid var(--border-soft)">
+          <img id="imagePreview" alt="ຕົວຢ່າງຮູບ" style="display:none;width:48px;height:48px;border-radius:8px;object-fit:cover;border:1px solid var(--border-soft)">
         </div>
-        <div class="hint-note">แนบรูปเล็กๆ ไว้แสดงคู่กับรายการ (แนะนำไฟล์ขนาดเล็กเพื่อไม่ให้ข้อมูลใหญ่เกินไป)</div>
+        <div class="hint-note">ແນບຮູບນ້ອຍໄວ້ສະແດງຄູ່ກັບລາຍການ (ແນະນຳໄຟລ໌ຂະໜາດນ້ອຍ)</div>
       </div>
       <div class="form-group">
-        <label>สลิปโอนเงิน (ลิงก์)</label>
-        <input type="text" id="inputSlip" placeholder="ลิงก์สลิปโอนเงิน">
-        <div class="hint-note">รูปสลิปอย่าเดียว ไม่ต้องปิดชื่อตัวเองหรือ QR • เพื่อใช้ตรวจสอบบัญชีคนขายโอนเงินคืน</div>
+        <label>ສລິບໂອນເງິນ (ລິ້ງ)</label>
+        <input type="text" id="inputSlip" placeholder="ລິ້ງສລິບໂອນເງິນ">
+        <div class="hint-note">ຮູບສລິບຢ່າງດຽວ ບໍ່ຕ້ອງປິດຊື່ຕົວເອງຫຼື QR • ເພື່ອກວດສອບບັນຊີ</div>
       </div>
 
       <!-- ส่วน 5: ข้อมูลติดต่อกลับ -->
-      <div class="section-divider">📞 ข้อมูลติดต่อกลับ (ไม่บังคับ)</div>
-      <div class="hint-note" style="margin-bottom:10px">เพื่อประโยชน์ของคุณเอง ใส่รายละเอียดการติดต่อกลับ (โดยจะมีทันทีในระบบหลังบ้าน ไม่เผยแพร่สู่สาธารณะ)</div>
+      <div class="section-divider">📞 ຂໍ້ມູນຕິດຕໍ່ກັບ (ບໍ່ບັງຄັບ)</div>
+      <div class="hint-note" style="margin-bottom:10px">ເພື່ອປະໂຫຍດຂອງທ່ານ ໃສ່ລາຍລະອຽດການຕິດຕໍ່ (ຈະຢູ່ໃນລະບົບ ບໍ່ເຜີຍແຜ່ສູ່ສາທາລະນະ)</div>
       <div class="form-row">
         <div class="form-group">
-          <label>อีเมลของฉัน</label>
+          <label>ອີເມວຂອງຂ້ອຍ</label>
           <input type="email" id="inputEmail" placeholder="my_mail@gmail.com">
         </div>
         <div class="form-group">
-          <label>เบอร์มือถือ</label>
+          <label>ເບີມືຖື</label>
           <input type="tel" id="inputPhone" placeholder="0891234567">
         </div>
       </div>
 
     </div><!-- end report-modal-body -->
     <div class="report-footer">
-      <button type="button" class="btn btn-secondary" id="entryCancelBtn">ยกเลิก</button>
-      <button type="submit" class="btn btn-primary">💾 บันทึก</button>
+      <button type="button" class="btn btn-secondary" id="entryCancelBtn">ຍົກເລີກ</button>
+      <button type="submit" class="btn btn-primary">💾 ບັນທຶກ</button>
     </div>
     </form>
   </div>
@@ -493,11 +493,11 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
 <div class="inbox-modal-overlay" id="inboxOverlay">
   <div class="inbox-modal">
     <div class="inbox-modal-header">
-      <h3>📬 กล่องจดหมาย <span class="count-badge" id="pendingCount" style="background:var(--amber-500);color:#fff">0</span></h3>
+      <h3>📬 ກ່ອງຈົດໝາຍ <span class="count-badge" id="pendingCount" style="background:var(--amber-500);color:#fff">0</span></h3>
       <button class="modal-close" id="inboxClose">✕</button>
     </div>
     <div class="inbox-modal-body" id="inboxBody">
-      <div class="empty-msg" style="padding:30px 20px"><span class="empty-icon">📭</span><div>ไม่มีรายการรออนุมัติ</div></div>
+      <div class="empty-msg" style="padding:30px 20px"><span class="empty-icon">📭</span><div>ບໍ່ມີລາຍການລໍການອະນຸມັດ</div></div>
     </div>
   </div>
 </div>
@@ -567,14 +567,14 @@ function formatDate(ts) {
   const date = ts.toDate ? ts.toDate() : new Date(ts);
   const diff = Date.now() - date.getTime();
   const m = Math.floor(diff / 60000), h = Math.floor(diff / 3600000), d = Math.floor(diff / 86400000);
-  if (m < 1) return 'เมื่อสักครู่';
-  if (m < 60) return m + ' นาทีที่แล้ว';
-  if (h < 24) return h + ' ชั่วโมงที่แล้ว';
-  if (d < 7) return d + ' วันที่แล้ว';
+  if (m < 1) return 'ສາກຄູ່ກ່ອນ';
+  if (m < 60) return m + ' ນາທີກ່ອນ';
+  if (h < 24) return h + ' ຊົ່ວໂມງກ່ອນ';
+  if (d < 7) return d + ' ວັນກ່ອນ';
   return date.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 function tagClass(tag) {
-  return { 'ไม่ส่งของ': 'tag-no-delivery', 'หลอกโอนเงิน': 'tag-scam-transfer', 'ของไม่ตรงปก': 'tag-not-as-described', 'หลอกลงทุน': 'tag-investment-scam' }[tag] || 'tag-other';
+  return { 'ບໍ່ສົ່ງສິນຄ້າ': 'tag-no-delivery', 'ຫລອກໂອນເງິນ': 'tag-scam-transfer', 'ສິນຄ້າບໍ່ຕົງປົກ': 'tag-not-as-described', 'ຫລອກລົງທຶນ': 'tag-investment-scam' }[tag] || 'tag-other';
 }
 const avPalette = ['av-coral', 'av-blue', 'av-amber', 'av-pink', 'av-mint', 'av-purple'];
 function avatarClass(name) {
@@ -623,7 +623,7 @@ function startListening() {
     updateStats();
   }, err => {
     console.error(err);
-    toast('ไม่สามารถโหลดข้อมูลได้', 'error');
+    toast('ບໍ່ສາມາດໂຫລດຂໍ້ມູນໄດ້', 'error');
   });
 }
 
@@ -649,7 +649,7 @@ function renderList() {
   document.getElementById('listCount').textContent = entries.length;
 
   if (entries.length === 0) {
-    container.innerHTML = `<div class="empty-msg"><span class="empty-icon">🔍</span><div>${currentQuery || currentFilter !== 'all' ? 'ไม่พบรายชื่อที่ตรงกับการค้นหา' : 'ยังไม่มีรายชื่อในระบบ'}</div></div>`;
+    container.innerHTML = `<div class="empty-msg"><span class="empty-icon">🔍</span><div>${currentQuery || currentFilter !== 'all' ? 'ບໍ່ພົບລາຍຊື່ທີ່ຕົງກັບການຄົ້ນຫາ' : 'ຍັງບໍ່ມີລາຍຊື່ໃນລະບົບ'}</div></div>`;
     return;
   }
 
@@ -665,45 +665,45 @@ function renderList() {
     card.innerHTML = `
       <div class="entry-card-header">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span class="entry-id">🔖 เลขรายงาน: ${escHtml(reportId)}</span>
+          <span class="entry-id">🔖 ເລກລາຍງານ: ${escHtml(reportId)}</span>
           <span class="tag ${tagClass(entry.tag)}">${escHtml(entry.tag)}</span>
         </div>
         ${isAdmin() ? `<div class="entry-actions-row">
-          <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${entry.id}">แก้ไข</button>
-          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${entry.id}">ลบ</button>
+          <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${entry.id}">ແກ້ໄຂ</button>
+          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${entry.id}">ລຶບ</button>
         </div>` : ''}
       </div>
 
       <div class="entry-name-row">
         <span class="entry-field-icon">👤</span>
-        <span class="entry-field-label">ชื่อคนขาย:</span>
+        <span class="entry-field-label">ຊື່ຜູ້ຂາຍ:</span>
         <span class="entry-name">${escHtml(entry.name)}${entry.lastname ? ' ' + escHtml(entry.lastname) : ''}</span>
       </div>
 
       <div class="entry-body">
         ${(entry.product || entry.contact) ? `<div class="entry-field">
           <span class="entry-field-icon">🧾</span>
-          <div><span class="entry-field-label">สินค้า: </span><span class="entry-field-value">${escHtml(entry.product || entry.contact)}</span></div>
+          <div><span class="entry-field-label">ສິນຄ້າ: </span><span class="entry-field-value">${escHtml(entry.product || entry.contact)}</span></div>
         </div>` : ''}
         ${entry.amount ? `<div class="entry-field">
           <span class="entry-field-icon">💸</span>
-          <div><span class="entry-field-label">ยอดโอน: </span><span class="entry-field-value" style="color:var(--coral-700);font-weight:700">${Number(entry.amount).toLocaleString()} บาท</span></div>
+          <div><span class="entry-field-label">ຍອດໂອນ: </span><span class="entry-field-value" style="color:var(--coral-700);font-weight:700">${Number(entry.amount).toLocaleString()} ກີບ</span></div>
         </div>` : ''}
         ${entry.transferDate ? `<div class="entry-field">
           <span class="entry-field-icon">📅</span>
-          <div><span class="entry-field-label">วันโอนเงิน: </span><span class="entry-field-value">${escHtml(entry.transferDate)}</span></div>
+          <div><span class="entry-field-label">ວັນໂອນເງິນ: </span><span class="entry-field-value">${escHtml(entry.transferDate)}</span></div>
         </div>` : ''}
         ${entry.reporter ? `<div class="entry-field">
           <span class="entry-field-icon">🏪</span>
-          <div><span class="entry-field-label">เพจขายของ: </span><span class="entry-field-value">${escHtml(entry.reporter)}</span></div>
+          <div><span class="entry-field-label">ຮ້ານຂາຍສິນຄ້າ: </span><span class="entry-field-value">${escHtml(entry.reporter)}</span></div>
         </div>` : ''}
         ${entry.bank ? `<div class="entry-field">
           <span class="entry-field-icon">🏦</span>
-          <div><span class="entry-field-label">ธนาคาร: </span><span class="entry-field-value">${escHtml(entry.bank)}</span></div>
+          <div><span class="entry-field-label">ທະນາຄານ: </span><span class="entry-field-value">${escHtml(entry.bank)}</span></div>
         </div>` : ''}
         <div class="entry-field">
           <span class="entry-field-icon">🕐</span>
-          <div><span class="entry-field-label">วันลงข้อมูล: </span><span class="entry-field-value">${formatDate(entry.createdAt)}</span></div>
+          <div><span class="entry-field-label">ວັນລົງຂໍ້ມູນ: </span><span class="entry-field-value">${formatDate(entry.createdAt)}</span></div>
         </div>
         ${entry.desc ? `<div class="entry-field" style="grid-column:1/-1">
           <span class="entry-field-icon">📝</span>
@@ -713,11 +713,11 @@ function renderList() {
 
       <div class="entry-card-footer">
         <div class="entry-stats-row">
-          <span class="stat-pill stat-pill-count">📋 พบ ${sameNameCount} ครั้ง</span>
-          ${totalAmt > 0 ? `<span class="stat-pill stat-pill-amount">💰 ยอดรวม ${totalAmt.toLocaleString()} บาท</span>` : ''}
+          <span class="stat-pill stat-pill-count">📋 ພົບ ${sameNameCount} ຄັ້ງ</span>
+          ${totalAmt > 0 ? `<span class="stat-pill stat-pill-amount">💰 ຍອດລວມ ${totalAmt.toLocaleString()} ກີບ</span>` : ''}
         </div>
         <div style="display:flex;gap:6px;align-items:center">
-          <a href="detail.html?id=${entry.id}" class="btn-detail">ดูรายละเอียด →</a>
+          <a href="detail.html?id=${entry.id}" class="btn-detail">ເບິ່ງລາຍລະອຽດ →</a>
         </div>
       </div>`;
     container.appendChild(card);
@@ -745,7 +745,7 @@ function renderPending() {
   if (!inboxBody) return;
 
   if (count === 0) {
-    inboxBody.innerHTML = `<div class="empty-msg" style="padding:30px 20px"><span class="empty-icon">📭</span><div>ไม่มีรายการรออนุมัติ</div></div>`;
+    inboxBody.innerHTML = `<div class="empty-msg" style="padding:30px 20px"><span class="empty-icon">📭</span><div>ບໍ່ມີລາຍການລໍການອະນຸມັດ</div></div>`;
     return;
   }
 
@@ -762,19 +762,19 @@ function renderPending() {
           <div class="entry-name">${escHtml(entry.name)}</div>
           <div class="entry-meta">
             ${entry.contact ? `<span>📌 ${escHtml(entry.contact)}</span>` : ''}
-            ${entry.reporter ? `<span>👤 แจ้งโดย ${escHtml(entry.reporter)}</span>` : ''}
+            ${entry.reporter ? `<span>👤 ແຈ້ງໂດຍ ${escHtml(entry.reporter)}</span>` : ''}
             ${entry.submittedBy ? `<span>✉️ ${escHtml(entry.submittedBy)}</span>` : ''}
           </div>
           ${entry.desc ? `<div class="entry-desc">${escHtml(entry.desc)}</div>` : ''}
-          ${entry.evidenceUrl ? `<div class="entry-date"><a href="${escHtml(entry.evidenceUrl)}" target="_blank" rel="noopener">ดูหลักฐานเพิ่มเติม ↗</a></div>` : ''}
-          <div class="entry-date">ส่งคำขอเมื่อ ${formatDate(entry.createdAt)}</div>
+          ${entry.evidenceUrl ? `<div class="entry-date"><a href="${escHtml(entry.evidenceUrl)}" target="_blank" rel="noopener">ເບິ່ງຫຼັກຖານເພີ່ມເຕີມ ↗</a></div>` : ''}
+          <div class="entry-date">ສົ່ງຄຳຂໍໃນ ${formatDate(entry.createdAt)}</div>
         </div>
       </div>
       <div class="entry-actions">
-        <span class="status-badge">รออนุมัติ</span>
+        <span class="status-badge">ລໍການອະນຸມັດ</span>
         <div class="entry-actions-row">
-          <button class="btn btn-approve btn-sm" data-paction="approve" data-id="${entry.id}">✅ อนุมัติ</button>
-          <button class="btn btn-danger btn-sm" data-paction="reject" data-id="${entry.id}">✕ ปฏิเสธ</button>
+          <button class="btn btn-approve btn-sm" data-paction="approve" data-id="${entry.id}">✅ ອະນຸມັດ</button>
+          <button class="btn btn-danger btn-sm" data-paction="reject" data-id="${entry.id}">✕ ປະຕິເສດ</button>
         </div>
       </div>`;
     inboxBody.appendChild(card);
@@ -806,14 +806,14 @@ document.getElementById('inboxBody').addEventListener('click', async e => {
         approvedAt: Timestamp.now(),
         approvedBy: currentUser.email
       });
-      toast('อนุมัติรายการเรียบร้อยแล้ว ✅');
+      toast('ອະນຸມັດລາຍການສຳເລັດ ✅');
     } else if (action === 'reject') {
-      if (!confirm('ยืนยันการปฏิเสธ/ลบคำขอนี้?')) return;
+      if (!confirm('ຢືນຢັນການປະຕິເສດ/ລຶບຄຳຂໍນີ້?')) return;
       await deleteDoc(doc(db, 'entries', id));
-      toast('ปฏิเสธคำขอเรียบร้อยแล้ว');
+      toast('ປະຕິເສດຄຳຂໍສຳເລັດ');
     }
   } catch (err) {
-    toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+    toast('ເກີດຂໍ້ຜິດພາດ: ' + err.message, 'error');
   }
 });
 
@@ -825,8 +825,8 @@ function updateStats() {
     const d = e.createdAt?.toDate ? e.createdAt.toDate() : new Date(e.createdAt || 0);
     return d.toDateString() === todayStr;
   }).length;
-  document.getElementById('noDeliveryCount').textContent = all.filter(e => e.tag === 'ไม่ส่งของ').length;
-  document.getElementById('investCount').textContent = all.filter(e => e.tag === 'หลอกลงทุน').length;
+  document.getElementById('noDeliveryCount').textContent = all.filter(e => e.tag === 'ບໍ່ສົ່ງສິນຄ້າ').length;
+  document.getElementById('investCount').textContent = all.filter(e => e.tag === 'ຫລອກລົງທຶນ').length;
 }
 
 /* ===== Auth Gate ===== */
@@ -879,19 +879,19 @@ async function doLogin() {
   errEl.style.display = 'none';
   const email = document.getElementById('lgEmail').value.trim();
   const password = document.getElementById('lgPassword').value;
-  if (!email || !password) { errEl.textContent = 'กรุณากรอกอีเมลและรหัสผ่าน'; errEl.style.display = 'block'; return; }
+  if (!email || !password) { errEl.textContent = 'ກະລຸນາໃສ່ອີເມວ ແລະ ລະຫັດຜ່ານ'; errEl.style.display = 'block'; return; }
   const btn = document.getElementById('loginGateSubmit');
-  btn.textContent = 'กำลังเข้าสู่ระบบ...'; btn.disabled = true;
+  btn.textContent = 'ກຳລັງເຂົ້າສູ່ລະບົບ...'; btn.disabled = true;
   try {
     await signInWithEmailAndPassword(auth, email, password);
     closeLoginGate();
-    toast('เข้าสู่ระบบสำเร็จ 👋');
+    toast('ເຂົ້າສູ່ລະບົບສຳເລັດ 👋');
     if (pendingAction) { pendingAction(); pendingAction = null; }
   } catch (err) {
-    errEl.textContent = err.code === 'auth/invalid-credential' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' : 'เกิดข้อผิดพลาด: ' + err.message;
+    errEl.textContent = err.code === 'auth/invalid-credential' ? 'ອີເມວ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ' : 'ເກີດຂໍ້ຜິດພາດ: ' + err.message;
     errEl.style.display = 'block';
   } finally {
-    btn.textContent = 'เข้าสู่ระบบ'; btn.disabled = false;
+    btn.textContent = 'ເຂົ້າສູ່ລະບົບ'; btn.disabled = false;
   }
 }
 document.getElementById('loginGateSubmit').onclick = doLogin;
@@ -903,34 +903,34 @@ async function doRegister() {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
-  if (!name || !email || !password) { errEl.textContent = 'กรุณากรอกข้อมูลให้ครบ'; errEl.style.display = 'block'; return; }
-  if (password.length < 6) { errEl.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'; errEl.style.display = 'block'; return; }
+  if (!name || !email || !password) { errEl.textContent = 'ກະລຸນາໃສ່ຂໍ້ມູນໃຫ້ຄົບ'; errEl.style.display = 'block'; return; }
+  if (password.length < 6) { errEl.textContent = 'ລະຫັດຜ່ານຕ້ອງມີຢ່າງໜ້ອຍ 6 ຕົວ'; errEl.style.display = 'block'; return; }
   const btn = document.getElementById('registerSubmit');
-  btn.textContent = 'กำลังสมัคร...'; btn.disabled = true;
+  btn.textContent = 'ກຳລັງສະໝັກ...'; btn.disabled = true;
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName: name });
     closeRegister();
-    toast('สมัครสมาชิกสำเร็จ ยินดีต้อนรับ ' + name + ' 🎉');
+    toast('ສະໝັກສຳເລັດ ຍິນດີຕ້ອນຮັບ ' + name + ' 🎉');
     if (pendingAction) { pendingAction(); pendingAction = null; }
   } catch (err) {
-    errEl.textContent = err.code === 'auth/email-already-in-use' ? 'อีเมลนี้มีบัญชีอยู่แล้ว' : 'เกิดข้อผิดพลาด: ' + err.message;
+    errEl.textContent = err.code === 'auth/email-already-in-use' ? 'ອີເມວນີ້ມີບັນຊີຢູ່ແລ້ວ' : 'ເກີດຂໍ້ຜິດພາດ: ' + err.message;
     errEl.style.display = 'block';
   } finally {
-    btn.textContent = 'สมัครสมาชิก'; btn.disabled = false;
+    btn.textContent = 'ສະໝັກສະມາຊິກ'; btn.disabled = false;
   }
 }
 document.getElementById('registerSubmit').onclick = doRegister;
 
 document.getElementById('logoutBtn').onclick = async () => {
   await signOut(auth);
-  toast('ออกจากระบบแล้ว');
+  toast('ອອກຈາກລະບົບແລ້ວ');
 };
 
 /* ===== Entry Modal ===== */
 function openEntryModal(id = null) {
   editingId = id;
-  document.getElementById('entryModalTitle').textContent = id ? 'แก้ไขข้อมูล' : 'แจ้งแบล็กลิสต์';
+  document.getElementById('entryModalTitle').textContent = id ? 'ແກ້ໄຂຂໍ້ມູນ' : 'ແຈ້ງແບລັກລິດ';
   document.querySelectorAll('#entryForm .form-group.error').forEach(g => g.classList.remove('error'));
 
   if (id) {
@@ -944,7 +944,7 @@ function openEntryModal(id = null) {
     document.getElementById('inputProduct').value = entry.product || '';
     document.getElementById('inputAmount').value = entry.amount || '';
     document.getElementById('inputTransferDate').value = entry.transferDate || '';
-    document.getElementById('inputTag').value = entry.tag || 'อื่นๆ';
+    document.getElementById('inputTag').value = entry.tag || 'ອື່ນໆ';
     document.getElementById('inputReporter').value = entry.reporter || '';
     document.getElementById('inputProvince').value = entry.province || '';
     document.getElementById('inputDesc').value = entry.desc || '';
@@ -972,22 +972,22 @@ document.getElementById('addBankBtn').addEventListener('click', () => {
   row.className = 'bank-row';
   row.innerHTML = `
     <div class="form-group">
-      <label>บัญชีเพิ่มเติม</label>
-      <input type="text" placeholder="ตัวเลขเท่านั้น">
+      <label>ບັນຊີເພີ່ມເຕີມ</label>
+      <input type="text" placeholder="ຕົວເລກເທົ່ານັ້ນ">
     </div>
     <div class="form-group">
-      <label>เลือกธนาคาร</label>
+      <label>ເລືອກທະນາຄານ</label>
       <select>
-        <option value="">เลือกธนาคาร</option>
-        <option>ธ.กรุงเทพ (BBL)</option>
-        <option>ธ.กสิกรไทย (KBANK)</option>
-        <option>ธ.กรุงไทย (KTB)</option>
-        <option>ธ.ทหารไทยธนชาต (TTB)</option>
-        <option>ธ.ไทยพาณิชย์ (SCB)</option>
-        <option>ธ.กรุงศรีอยุธยา (BAY)</option>
-        <option>ธ.ออมสิน</option>
-        <option>พร้อมเพย์ / PromptPay</option>
-        <option>อื่นๆ</option>
+        <option value="">ເລືອກທະນາຄານ</option>
+        <option>ທ.ກຣຸງເທບ (BBL)</option>
+        <option>ທ.ກະສິກອນ (KBANK)</option>
+        <option>ທ.ກຣຸງໄທ (KTB)</option>
+        <option>ທ.ທະຫານໄທ (TTB)</option>
+        <option>ທ.ໄທພານິດ (SCB)</option>
+        <option>ທ.ກຣຸງສີ (BAY)</option>
+        <option>ທ.ອອມສິນ</option>
+        <option>ພຣ້ອມເພ / PromptPay</option>
+        <option>ອື່ນໆ</option>
       </select>
     </div>
     <button type="button" onclick="this.closest('.bank-row').remove()" style="background:var(--coral-100);color:var(--coral-700);border:none;border-radius:var(--radius-md);padding:0 10px;font-size:18px;cursor:pointer;margin-top:24px;height:42px">✕</button>`;
@@ -1001,7 +1001,7 @@ document.getElementById('entryForm').onsubmit = async e => {
   let valid = true;
   if (!name) { document.getElementById('inputName').closest('.form-group').classList.add('error'); valid = false; }
   if (!desc) { document.getElementById('inputDesc').closest('.form-group').classList.add('error'); valid = false; }
-  if (!valid) { toast('กรุณากรอกข้อมูลที่จำเป็นให้ครบ', 'error'); return; }
+  if (!valid) { toast('ກະລຸນາໃສ່ຂໍ້ມູນທີ່ຈຳເປັນໃຫ້ຄົບ', 'error'); return; }
 
   const data = {
     name,
@@ -1013,7 +1013,7 @@ document.getElementById('entryForm').onsubmit = async e => {
     amount: document.getElementById('inputAmount').value.trim(),
     transferDate: document.getElementById('inputTransferDate').value,
     tag: document.getElementById('inputTag').value,
-    reporter: document.getElementById('inputReporter').value.trim() || 'ไม่ระบุ',
+    reporter: document.getElementById('inputReporter').value.trim() || 'ບໍ່ລະບຸ',
     province: document.getElementById('inputProvince').value.trim(),
     desc,
     evidenceUrl: document.getElementById('inputEvidence').value.trim(),
@@ -1025,9 +1025,9 @@ document.getElementById('entryForm').onsubmit = async e => {
 
   try {
     if (editingId) {
-      if (!isAdmin()) { toast('เฉพาะแอดมินเท่านั้นที่แก้ไขข้อมูลได้', 'error'); return; }
+      if (!isAdmin()) { toast('ສະເພາະແອດມິນເທົ່ານັ້ນທີ່ແກ້ໄຂຂໍ້ມູນໄດ້', 'error'); return; }
       await updateDoc(doc(db, 'entries', editingId), data);
-      toast('แก้ไขข้อมูลเรียบร้อยแล้ว');
+      toast('ແກ້ໄຂຂໍ້ມູນສຳເລັດ');
     } else {
       await addDoc(entriesCol, {
         ...data,
@@ -1036,11 +1036,11 @@ document.getElementById('entryForm').onsubmit = async e => {
         status: 'pending',
         submittedBy: currentUser.email
       });
-      toast('ส่งคำขอเรียบร้อยแล้ว รอแอดมินตรวจสอบและอนุมัติ ⏳');
+      toast('ສົ່ງຄຳຂໍສຳເລັດ ລໍຖ້າແອດມິນກວດສອບ ⏳');
     }
     closeEntryModal();
   } catch (err) {
-    toast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+    toast('ເກີດຂໍ້ຜິດພາດ: ' + err.message, 'error');
   }
 };
 
@@ -1052,14 +1052,14 @@ document.getElementById('listContainer').addEventListener('click', e => {
   const action = btn.dataset.action;
 
   requireAuth(() => {
-    if (!isAdmin()) { toast('เฉพาะแอดมินเท่านั้นที่ทำรายการนี้ได้', 'error'); return; }
+    if (!isAdmin()) { toast('ສະເພາະແອດມິນເທົ່ານັ້ນ', 'error'); return; }
     if (action === 'edit') {
       openEntryModal(id);
     } else if (action === 'delete') {
-      if (!confirm('ยืนยันการลบรายชื่อนี้?')) return;
+      if (!confirm('ຢືນຢັນການລຶບລາຍຊື່ນີ້?')) return;
       deleteDoc(doc(db, 'entries', id))
-        .then(() => toast('ลบรายชื่อเรียบร้อยแล้ว'))
-        .catch(err => toast('เกิดข้อผิดพลาด: ' + err.message, 'error'));
+        .then(() => toast('ລຶບລາຍຊື່ສຳເລັດ'))
+        .catch(err => toast('ເກີດຂໍ້ຜິດພາດ: ' + err.message, 'error'));
     }
   });
 });

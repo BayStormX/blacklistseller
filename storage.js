@@ -1,6 +1,6 @@
 /* ===================================================
    storage.js
-   จัดการข้อมูล Backlist ด้วย localStorage
+   ຈັດການຂໍ້ມູນ Backlist ດ້ວຍ localStorage
    =================================================== */
 
 const Storage = (() => {
@@ -11,7 +11,7 @@ const Storage = (() => {
       const raw = localStorage.getItem(KEY);
       return raw ? JSON.parse(raw) : [];
     } catch (err) {
-      console.error('อ่านข้อมูลผิดพลาด', err);
+      console.error('ອ່ານຂໍ້ມູນຜິດພາດ', err);
       return [];
     }
   }
@@ -21,7 +21,7 @@ const Storage = (() => {
       localStorage.setItem(KEY, JSON.stringify(entries));
       return true;
     } catch (err) {
-      console.error('บันทึกข้อมูลผิดพลาด', err);
+      console.error('ບັນທຶກຂໍ້ມູນຜິດພາດ', err);
       return false;
     }
   }
@@ -40,10 +40,10 @@ const Storage = (() => {
       id: 'e_' + Date.now() + '_' + Math.floor(Math.random() * 10000),
       name: entry.name || '',
       contact: entry.contact || '',
-      tag: entry.tag || 'อื่นๆ',
+      tag: entry.tag || 'ອື່ນໆ',
       desc: entry.desc || '',
       evidenceUrl: entry.evidenceUrl || '',
-      reporter: entry.reporter || 'ไม่ระบุชื่อ',
+      reporter: entry.reporter || 'ບໍ່ລະບຸຊື່',
       verified: false,
       createdAt: Date.now()
     };
@@ -90,32 +90,32 @@ const Storage = (() => {
     if (_read().length > 0) return;
     const demo = [
       {
-        name: 'นางสาวน้ำฝน xxxxxx',
-        contact: 'บัญชี: ธ.กรุงไทย xxx-x-x4567-x',
-        tag: 'ไม่ส่งของ',
-        desc: 'โอนเงินซื้อกระเป๋าแบรนด์เนมมือสองแล้วไม่ส่งของ ปิดการติดต่อหลังรับเงิน',
-        reporter: 'ผู้เสียหาย A'
+        name: 'ນາງສາວ xxxxxx',
+        contact: 'ບັນຊີ: ທ.ກຣຸງໄທ xxx-x-x4567-x',
+        tag: 'ບໍ່ສົ່ງສິນຄ້າ',
+        desc: 'ໂອນເງິນຊື້ກະເປົ໋າມືສອງແລ້ວບໍ່ສົ່ງສິນຄ້າ ປິດການຕິດຕໍ່ຫຼັງຮັບເງິນ',
+        reporter: 'ຜູ້ເສຍຫາຍ A'
       },
       {
-        name: 'เพจ Korea Shop xxxx',
-        contact: 'เบอร์: 08x-xxx-x231',
-        tag: 'หลอกโอนเงิน',
-        desc: 'อ้างว่าพรีออเดอร์ของจากเกาหลี เก็บเงินมัดจำแล้วเชิดหนี',
-        reporter: 'ผู้เสียหาย B'
+        name: 'ເພດ Korea Shop xxxx',
+        contact: 'ເບີ: 08x-xxx-x231',
+        tag: 'ຫລອກໂອນເງິນ',
+        desc: 'ອ້າງວ່າພຣີອໍເດີຈາກເກົາຫຼີ ເກັບເງິນມັດຈຳແລ້ວໜີ',
+        reporter: 'ຜູ້ເສຍຫາຍ B'
       },
       {
         name: 'ID Line: minnnxxxx',
         contact: 'Line ID',
-        tag: 'ของไม่ตรงปก',
-        desc: 'สั่งเสื้อผ้าตามรูป ได้ของจริงคุณภาพต่ำกว่ารูปมาก ไม่รับเปลี่ยน/คืน',
-        reporter: 'ผู้เสียหาย C'
+        tag: 'ສິນຄ້າບໍ່ຕົງປົກ',
+        desc: 'ສັ່ງເຄື່ອງນຸ່ງຕາມຮູບ ໄດ້ຂອງຈິງຄຸນນະພາບຕ່ຳ ບໍ່ຮັບປ່ຽນ/ຄືນ',
+        reporter: 'ຜູ້ເສຍຫາຍ C'
       },
       {
-        name: 'บริษัท Forex Easy Profit',
-        contact: 'เว็บไซต์ลงทุน',
-        tag: 'หลอกลงทุน',
-        desc: 'ชักชวนลงทุนผลตอบแทนสูงเกินจริง ปิดเว็บหนีหลังระดมทุน',
-        reporter: 'ผู้เสียหาย D'
+        name: 'ບໍລິສັດ Forex Easy Profit',
+        contact: 'ເວັບໄຊລົງທຶນ',
+        tag: 'ຫລອກລົງທຶນ',
+        desc: 'ຊັກຊວນລົງທຶນຜົນຕອບແທນສູງ ປິດເວັບໜີຫຼັງລະດົມທຶນ',
+        reporter: 'ຜູ້ເສຍຫາຍ D'
       }
     ];
     demo.forEach((d, i) => {

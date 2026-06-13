@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="lo">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>รายละเอียด – Backlist เช็คก่อนโอน</title>
+<title>ລາຍລະອຽດ – Backlist ກວດກ່ອນໂອນ</title>
 <style>
 :root {
   --mint-50: #EAFBF4; --mint-100: #DFF6EC; --mint-200: #BFEFDD;
@@ -113,28 +113,28 @@ a:hover{text-decoration:underline}
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <div>กำลังโหลดข้อมูล...</div>
+  <div>ກຳລັງໂຫລດຂໍ້ມູນ...</div>
 </div>
 
 <header class="topbar">
   <div class="topbar-inner">
     <a href="index.html" class="brand">
       <div class="brand-icon">🛡️</div>
-      Backlist เช็คก่อนโอน
+      Backlist ກວດກ່ອນໂອນ
     </a>
-    <a href="index.html" class="btn-back">← กลับหน้าหลัก</a>
+    <a href="index.html" class="btn-back">← ກັບໄປໜ້າຫຼັກ</a>
   </div>
 </header>
 
 <div class="page-wrapper" id="pageWrapper" style="display:none">
 
   <div class="warn-box">
-    ⚠️ ข้อมูลนี้มาจากการรายงานของผู้ใช้งาน ยังไม่ผ่านการพิสูจน์ทางกฎหมาย
-    กรุณาตรวจสอบข้อมูลเพิ่มเติมก่อนตัดสินใจ และไม่ควรนำไปใช้กล่าวโทษบุคคลโดยไม่มีหลักฐาน
+    ⚠️ ຂໍ້ມູນນີ້ມາຈາກການລາຍງານຂອງຜູ້ໃຊ້ ຍັງບໍ່ໄດ້ຜ່ານການພິສູດທາງກົດໝາຍ
+    ກະລຸນາກວດສອບຂໍ້ມູນເພີ່ມເຕີມກ່ອນຕັດສິນໃຈ ແລະ ບໍ່ຄວນນຳໄປໃຊ້ກ່າວຫາບຸກຄົນໂດຍບໍ່ມີຫຼັກຖານ
   </div>
 
   <div class="report-id-bar">
-    <span class="report-id-label">🔖 เลขรายงาน: <span id="reportId">–</span></span>
+    <span class="report-id-label">🔖 ເລກລາຍງານ: <span id="reportId">–</span></span>
     <span class="report-date" id="reportDate"></span>
   </div>
 
@@ -149,42 +149,42 @@ a:hover{text-decoration:underline}
 
   <!-- ข้อมูลรายงาน -->
   <div class="section-card">
-    <div class="section-head">📋 ข้อมูลหลัก</div>
+    <div class="section-head">📋 ຂໍ້ມູນຫຼັກ</div>
     <div class="field-grid" id="mainFields"></div>
   </div>
 
   <!-- รายละเอียดเหตุการณ์ -->
   <div class="section-card" id="descCard" style="display:none">
-    <div class="section-head">📝 รายละเอียดเหตุการณ์</div>
+    <div class="section-head">📝 ລາຍລະອຽດເຫດການ</div>
     <div class="desc-block" id="descBlock"></div>
   </div>
 
   <!-- หลักฐาน -->
   <div class="section-card" id="evidenceCard" style="display:none">
-    <div class="section-head">🖼️ หลักฐานที่แนบ</div>
+    <div class="section-head">🖼️ ຫຼັກຖານທີ່ແນບ</div>
     <div id="evidenceBlock"></div>
   </div>
 
   <!-- ข้อมูลส่วนตัวของผู้รายงาน (ถูกปิด) -->
   <div class="section-card">
-    <div class="section-head">🔒 ข้อมูลส่วนตัว (ถูกปิดเพื่อความเป็นส่วนตัว)</div>
+    <div class="section-head">🔒 ຂໍ້ມູນສ່ວນຕົວ (ຖືກປິດເພື່ອຄວາມເປັນສ່ວນຕົວ)</div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <div class="field-item">
-        <span class="field-label">อีเมลผู้รายงาน</span>
+        <span class="field-label">ອີເມວຜູ້ລາຍງານ</span>
         <span>
           <span class="field-value redacted" id="emailField">●●●●●●●●@●●●●●●</span>
-          <button class="btn-reveal" id="revealEmailBtn" title="แสดงเฉพาะผู้ที่มีสิทธิ์">🔓 ดู</button>
+          <button class="btn-reveal" id="revealEmailBtn" title="ສະແດງສະເພາະຜູ້ທີ່ມີສິດ">🔓 ເບິ່ງ</button>
         </span>
       </div>
       <div class="field-item">
-        <span class="field-label">เบอร์โทรผู้รายงาน</span>
+        <span class="field-label">ເບີໂທຜູ້ລາຍງານ</span>
         <span>
           <span class="field-value redacted" id="phoneField">●●●-●●●-●●●●</span>
-          <button class="btn-reveal" id="revealPhoneBtn" title="แสดงเฉพาะผู้ที่มีสิทธิ์">🔓 ดู</button>
+          <button class="btn-reveal" id="revealPhoneBtn" title="ສະແດງສະເພາະຜູ້ທີ່ມີສິດ">🔓 ເບິ່ງ</button>
         </span>
       </div>
       <div style="margin-top:4px">
-        <span class="private-notice">🔒 ข้อมูลนี้จะถูกเปิดเผยเฉพาะผู้ดูแลระบบเท่านั้น</span>
+        <span class="private-notice">🔒 ຂໍ້ມູນນີ້ຈະຖືກເປີດເຜີຍສະເພາະຜູ້ດູແລລະບົບເທົ່ານັ້ນ</span>
       </div>
     </div>
   </div>
@@ -194,9 +194,9 @@ a:hover{text-decoration:underline}
 <div id="notFoundMsg" style="display:none">
   <div class="not-found">
     <div class="icon">🔍</div>
-    <div style="font-size:18px;font-weight:700;color:var(--text-main);margin-bottom:8px">ไม่พบรายการนี้</div>
-    <div style="margin-bottom:20px">รายการนี้อาจถูกลบไปแล้ว หรือ ID ไม่ถูกต้อง</div>
-    <a href="index.html" class="btn-evidence">← กลับหน้าหลัก</a>
+    <div style="font-size:18px;font-weight:700;color:var(--text-main);margin-bottom:8px">ບໍ່ພົບລາຍການນີ້</div>
+    <div style="margin-bottom:20px">ລາຍການນີ້ອາດຖືກລຶບໄປແລ້ວ ຫຼື ID ບໍ່ຖືກຕ້ອງ</div>
+    <a href="index.html" class="btn-evidence">← ກັບໄປໜ້າຫຼັກ</a>
   </div>
 </div>
 
@@ -237,14 +237,14 @@ function formatDate(ts) {
   const date = ts.toDate ? ts.toDate() : new Date(ts);
   const diff = Date.now() - date.getTime();
   const m = Math.floor(diff/60000), h = Math.floor(diff/3600000), dy = Math.floor(diff/86400000);
-  if (m < 1) return 'เมื่อสักครู่';
-  if (m < 60) return m + ' นาทีที่แล้ว';
-  if (h < 24) return h + ' ชั่วโมงที่แล้ว';
-  if (dy < 7) return dy + ' วันที่แล้ว';
-  return date.toLocaleDateString('th-TH', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  if (m < 1) return 'ສາກຄູ່ກ່ອນ';
+  if (m < 60) return m + ' ນາທີກ່ອນ';
+  if (h < 24) return h + ' ຊົ່ວໂມງກ່ອນ';
+  if (dy < 7) return dy + ' ວັນກ່ອນ';
+  return date.toLocaleDateString('lo-LA', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
 }
 function tagClass(tag) {
-  return {'ไม่ส่งของ':'tag-no-delivery','หลอกโอนเงิน':'tag-scam-transfer','ของไม่ตรงปก':'tag-not-as-described','หลอกลงทุน':'tag-investment-scam'}[tag]||'tag-other';
+  return {'ບໍ່ສົ່ງສິນຄ້າ':'tag-no-delivery','ຫລອກໂອນເງິນ':'tag-scam-transfer','ສິນຄ້າບໍ່ຕົງປົກ':'tag-not-as-described','ຫລອກລົງທຶນ':'tag-investment-scam'}[tag]||'tag-other';
 }
 const avPalette = ['av-coral','av-blue','av-amber','av-pink','av-mint','av-purple'];
 function avatarClass(name) {
@@ -316,7 +316,7 @@ async function load() {
     renderEntry(entryData, sameCount, totalAmt, reportNumber);
   } catch (err) {
     console.error(err);
-    toast('เกิดข้อผิดพลาดในการโหลดข้อมูล','error');
+    toast('ເກີດຂໍ້ຜິດພາດໃນການໂຫລດຂໍ້ມູນ','error');
     showNotFound();
   } finally {
     document.getElementById('loadingOverlay').style.display = 'none';
@@ -329,7 +329,7 @@ function showNotFound() {
 }
 
 function renderEntry(entry, sameCount, totalAmt, reportNumber) {
-  document.title = `${entry.name} – Backlist เช็คก่อนโอน`;
+  document.title = `${entry.name} – Backlist ກວດກ່ອນໂອນ`;
 
   document.getElementById('reportId').textContent = String(reportNumber);
   document.getElementById('reportDate').textContent = 'แจ้งเมื่อ ' + formatDate(entry.createdAt);
@@ -345,20 +345,20 @@ function renderEntry(entry, sameCount, totalAmt, reportNumber) {
   const badgesEl = document.getElementById('heroBadges');
   badgesEl.innerHTML = `<span class="tag ${tagClass(entry.tag)}">${esc(entry.tag)}</span>`;
   if (sameCount > 1)
-    badgesEl.innerHTML += `<span class="report-count-pill">📋 ถูกแจ้ง ${sameCount} ครั้ง</span>`;
+    badgesEl.innerHTML += `<span class="report-count-pill">📋 ຖືກແຈ້ງ ${sameCount} ຄັ້ງ</span>`;
   if (totalAmt > 0)
-    badgesEl.innerHTML += `<span class="amount-pill">💰 ยอดรวม ${totalAmt.toLocaleString()} บาท</span>`;
+    badgesEl.innerHTML += `<span class="amount-pill">💰 ຍອດລວມ ${totalAmt.toLocaleString()} ບາດ</span>`;
 
   // Main fields
   const fields = [
-    entry.contact   && { icon:'📌', label:'ข้อมูลติดต่อ (ผู้ถูกแจ้ง)', value: entry.contact },
-    entry.bank      && { icon:'🏦', label:'ธนาคาร', value: entry.bank },
-    entry.nationalId && { icon:'🪪', label:'เลขบัตรประชาชน', value: entry.nationalId },
-    entry.product   && { icon:'🧾', label:'สินค้า/บริการ', value: entry.product },
-    entry.amount    && { icon:'💸', label:'ยอดที่ถูกโกง', value: Number(entry.amount).toLocaleString() + ' บาท', highlight: true },
-    entry.transferDate && { icon:'📅', label:'วันที่โอนเงิน', value: entry.transferDate },
-    entry.province  && { icon:'📍', label:'จังหวัด', value: entry.province },
-    entry.reporter  && { icon:'🏪', label:'เพจ/ร้านค้าที่เกี่ยวข้อง', value: entry.reporter },
+    entry.contact   && { icon:'📌', label:'ຂໍ້ມູນຕິດຕໍ່ (ຜູ້ຖືກແຈ້ງ)', value: entry.contact },
+    entry.bank      && { icon:'🏦', label:'ທະນາຄານ', value: entry.bank },
+    entry.nationalId && { icon:'🪪', label:'ເລກບັດປະຊາຊົນ', value: entry.nationalId },
+    entry.product   && { icon:'🧾', label:'ສິນຄ້າ/ບໍລິການ', value: entry.product },
+    entry.amount    && { icon:'💸', label:'ຍອດທີ່ຖືກໂກງ', value: Number(entry.amount).toLocaleString() + ' ບາດ', highlight: true },
+    entry.transferDate && { icon:'📅', label:'ວັນທີ່ໂອນເງິນ', value: entry.transferDate },
+    entry.province  && { icon:'📍', label:'ແຂວງ', value: entry.province },
+    entry.reporter  && { icon:'🏪', label:'ເພຈ/ຮ້ານຄ້າທີ່ກ່ຽວຂ້ອງ', value: entry.reporter },
   ].filter(Boolean);
 
   const mainEl = document.getElementById('mainFields');
@@ -382,16 +382,16 @@ function renderEntry(entry, sameCount, totalAmt, reportNumber) {
 
     if (entry.evidenceUrl) {
       if (isImg(entry.evidenceUrl)) {
-        html += `<a href="${esc(entry.evidenceUrl)}" target="_blank" rel="noopener"><img src="${esc(entry.evidenceUrl)}" alt="หลักฐาน" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border-soft);margin-bottom:10px;display:block"></a>`;
+        html += `<a href="${esc(entry.evidenceUrl)}" target="_blank" rel="noopener"><img src="${esc(entry.evidenceUrl)}" alt="ຫຼັກຖານ" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border-soft);margin-bottom:10px;display:block"></a>`;
       } else {
-        html += `<a href="${esc(entry.evidenceUrl)}" target="_blank" rel="noopener" class="btn-evidence" style="margin-bottom:8px;display:inline-flex">🖼️ ดูหลักฐาน / รูปภาพ ↗</a>`;
+        html += `<a href="${esc(entry.evidenceUrl)}" target="_blank" rel="noopener" class="btn-evidence" style="margin-bottom:8px;display:inline-flex">🖼️ ເບິ່ງຫຼັກຖານ / ຮູບພາບ ↗</a>`;
       }
     }
     if (entry.slipUrl) {
       if (isImg(entry.slipUrl)) {
-        html += `<a href="${esc(entry.slipUrl)}" target="_blank" rel="noopener"><img src="${esc(entry.slipUrl)}" alt="สลิปโอนเงิน" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border-soft);margin-top:8px;display:block"></a>`;
+        html += `<a href="${esc(entry.slipUrl)}" target="_blank" rel="noopener"><img src="${esc(entry.slipUrl)}" alt="ສະລິບໂອນເງິນ" style="max-width:100%;border-radius:var(--radius-md);border:1px solid var(--border-soft);margin-top:8px;display:block"></a>`;
       } else {
-        html += `<br><a href="${esc(entry.slipUrl)}" target="_blank" rel="noopener" class="btn-evidence" style="background:var(--blue-500);margin-top:8px;display:inline-flex">🧾 ดูสลิปโอนเงิน ↗</a>`;
+        html += `<br><a href="${esc(entry.slipUrl)}" target="_blank" rel="noopener" class="btn-evidence" style="background:var(--blue-500);margin-top:8px;display:inline-flex">🧾 ເບິ່ງສະລິບໂອນເງິນ ↗</a>`;
       }
     }
     document.getElementById('evidenceBlock').innerHTML = html;
@@ -424,7 +424,7 @@ function renderPrivateFields(entry, user) {
       revEmail.style.display = '';
     }
   } else {
-    emailEl.textContent = 'ไม่ได้ระบุ';
+    emailEl.textContent = 'ບໍ່ໄດ້ລະບຸ';
     emailEl.className = 'field-value';
     revEmail.style.display = 'none';
   }
@@ -442,7 +442,7 @@ function renderPrivateFields(entry, user) {
       revPhone.style.display = '';
     }
   } else {
-    phoneEl.textContent = 'ไม่ได้ระบุ';
+    phoneEl.textContent = 'ບໍ່ໄດ້ລະບຸ';
     phoneEl.className = 'field-value';
     revPhone.style.display = 'none';
   }
@@ -450,10 +450,10 @@ function renderPrivateFields(entry, user) {
 
 // Reveal buttons → prompt login hint (non-admin cannot access)
 document.getElementById('revealEmailBtn').addEventListener('click', () => {
-  toast('ข้อมูลส่วนตัวนี้เปิดดูได้เฉพาะผู้ดูแลระบบเท่านั้น 🔒', 'error');
+  toast('ຂໍ້ມູນສ່ວນຕົວນີ້ເປີດເບິ່ງໄດ້ສະເພາະຜູ້ດູແລລະບົບເທົ່ານັ້ນ 🔒', 'error');
 });
 document.getElementById('revealPhoneBtn').addEventListener('click', () => {
-  toast('ข้อมูลส่วนตัวนี้เปิดดูได้เฉพาะผู้ดูแลระบบเท่านั้น 🔒', 'error');
+  toast('ຂໍ້ມູນສ່ວນຕົວນີ້ເປີດເບິ່ງໄດ້ສະເພາະຜູ້ດູແລລະບົບເທົ່ານັ້ນ 🔒', 'error');
 });
 
 load();

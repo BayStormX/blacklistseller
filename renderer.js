@@ -1,6 +1,6 @@
 /* ===================================================
    renderer.js
-   สร้าง DOM elements สำหรับรายการแบล็กลิสต์
+   ສ້າງ DOM elements ສຳລັບລາຍການແບລັກລິດ
    =================================================== */
 
 const Renderer = (() => {
@@ -21,18 +21,18 @@ const Renderer = (() => {
           <div class="entry-name">${Utils.escapeHtml(entry.name)}</div>
           <div class="entry-meta">
             ${entry.contact ? `<span class="meta-item">📌 ${Utils.escapeHtml(entry.contact)}</span>` : ''}
-            ${entry.reporter ? `<span class="meta-item">👤 แจ้งโดย ${Utils.escapeHtml(entry.reporter)}</span>` : ''}
+            ${entry.reporter ? `<span class="meta-item">👤 ແຈ້ງໂດຍ ${Utils.escapeHtml(entry.reporter)}</span>` : ''}
           </div>
           ${entry.desc ? `<div class="entry-desc">${Utils.escapeHtml(entry.desc)}</div>` : ''}
-          ${entry.evidenceUrl ? `<div class="entry-date"><a href="${Utils.escapeHtml(entry.evidenceUrl)}" target="_blank" rel="noopener noreferrer">ดูหลักฐานเพิ่มเติม ↗</a></div>` : ''}
-          <div class="entry-date">แจ้งเมื่อ ${Utils.formatDate(entry.createdAt)}</div>
+          ${entry.evidenceUrl ? `<div class="entry-date"><a href="${Utils.escapeHtml(entry.evidenceUrl)}" target="_blank" rel="noopener noreferrer">ເບິ່ງຫຼັກຖານເພີ່ມເຕີມ ↗</a></div>` : ''}
+          <div class="entry-date">ແຈ້ງໃນວັນທີ ${Utils.formatDate(entry.createdAt)}</div>
         </div>
       </div>
       <div class="entry-actions">
         <span class="tag ${tagClass}">${Utils.escapeHtml(entry.tag)}</span>
         <div class="entry-actions-row">
-          <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${entry.id}">แก้ไข</button>
-          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${entry.id}">ลบ</button>
+          <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${entry.id}">ແກ້ໄຂ</button>
+          <button class="btn btn-danger btn-sm" data-action="delete" data-id="${entry.id}">ລຶບ</button>
         </div>
       </div>
     `;
@@ -53,7 +53,7 @@ const Renderer = (() => {
   function renderList(container, entries, emptyMessage) {
     container.innerHTML = '';
     if (entries.length === 0) {
-      container.appendChild(renderEmptyState(emptyMessage || 'ยังไม่มีรายชื่อ ลองเพิ่มรายชื่อแบล็กลิสต์แรกของคุณ'));
+      container.appendChild(renderEmptyState(emptyMessage || 'ຍັງບໍ່ມີລາຍຊື່ ເພີ່ມລາຍຊື່ແບລັກລິດທຳອິດຂອງທ່ານ'));
       return;
     }
     entries.forEach(entry => container.appendChild(createEntryCard(entry)));
@@ -67,8 +67,8 @@ const Renderer = (() => {
 
     if (totalEl) totalEl.textContent = total;
     if (todayEl) todayEl.textContent = today;
-    if (investEl) investEl.textContent = tagCounts['หลอกลงทุน'] || 0;
-    if (noDeliveryEl) noDeliveryEl.textContent = tagCounts['ไม่ส่งของ'] || 0;
+    if (investEl) investEl.textContent = tagCounts['ຫລອກລົງທຶນ'] || 0;
+    if (noDeliveryEl) noDeliveryEl.textContent = tagCounts['ບໍ່ສົ່ງສິນຄ້າ'] || 0;
   }
 
   return { renderList, updateStats, createEntryCard };

@@ -1,6 +1,6 @@
 /* ===================================================
    auth.js
-   ระบบ login / session management
+   ລະບົບ login / session management
    =================================================== */
 
 const Auth = (() => {
@@ -11,7 +11,7 @@ const Auth = (() => {
   function _initDefaultUsers() {
     if (localStorage.getItem(USERS_KEY)) return;
     const defaults = [
-      { username: 'admin', password: 'admin1234', role: 'admin', displayName: 'ผู้ดูแลระบบ' }
+      { username: 'admin', password: 'admin1234', role: 'admin', displayName: 'ຜູ້ດູແລລະບົບ' }
     ];
     localStorage.setItem(USERS_KEY, JSON.stringify(defaults));
   }
@@ -43,7 +43,7 @@ const Auth = (() => {
   function login(username, password) {
     const users = _getUsers();
     const user = users.find(u => u.username === username && u.password === password);
-    if (!user) return { ok: false, error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' };
+    if (!user) return { ok: false, error: 'ຊື່ຜູ້ໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ' };
 
     const session = {
       username: user.username,
@@ -67,7 +67,7 @@ const Auth = (() => {
     }
   }
 
-  /* ---------- Guard: redirect ถ้า login แล้ว ---------- */
+  /* ---------- Guard: redirect ถ้า ເຂົ້າລະບົບແລ້ວ ---------- */
   function redirectIfAuthed(dest = 'index.html') {
     if (isLoggedIn()) {
       window.location.href = dest;
@@ -78,7 +78,7 @@ const Auth = (() => {
   function addUser(username, password, displayName = '', role = 'user') {
     const users = _getUsers();
     if (users.find(u => u.username === username)) {
-      return { ok: false, error: 'ชื่อผู้ใช้นี้มีอยู่แล้ว' };
+      return { ok: false, error: 'ຊື່ຜູ້ໃຊ້ນີ້ມີຢູ່ແລ້ວ' };
     }
     users.push({ username, password, role, displayName: displayName || username });
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
@@ -87,7 +87,7 @@ const Auth = (() => {
 
   function removeUser(username) {
     const s = getSession();
-    if (s && s.username === username) return { ok: false, error: 'ไม่สามารถลบบัญชีที่กำลังใช้งานอยู่' };
+    if (s && s.username === username) return { ok: false, error: 'ບໍ່ສາມາດລຶບບັນຊີທີ່ກຳລັງໃຊ້ງານຢູ່' };
     let users = _getUsers().filter(u => u.username !== username);
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
     return { ok: true };
@@ -100,7 +100,7 @@ const Auth = (() => {
   function changePassword(username, newPassword) {
     const users = _getUsers();
     const idx = users.findIndex(u => u.username === username);
-    if (idx === -1) return { ok: false, error: 'ไม่พบผู้ใช้' };
+    if (idx === -1) return { ok: false, error: 'ບໍ່ພົບຜູ້ໃຊ້' };
     users[idx].password = newPassword;
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
     return { ok: true };

@@ -1,6 +1,6 @@
 /* ===================================================
    app.js
-   ตัวควบคุมหลักของแอปพลิเคชัน
+   ຕົວຄວບຄຸມຫຼັກຂອງແອັບ
    =================================================== */
 
 const App = (() => {
@@ -8,7 +8,7 @@ const App = (() => {
   let currentFilter = 'all';
   let currentQuery = '';
 
-  const TAGS = ['ไม่ส่งของ', 'หลอกโอนเงิน', 'ของไม่ตรงปก', 'หลอกลงทุน', 'อื่นๆ'];
+  const TAGS = ['ບໍ່ສົ່ງສິນຄ້າ', 'ຫລອກໂອນເງິນ', 'ສິນຄ້າບໍ່ຕົງປົກ', 'ຫລອກລົງທຶນ', 'ອື່ນໆ'];
 
   function init() {
     listContainer = document.getElementById('listContainer');
@@ -56,9 +56,9 @@ const App = (() => {
 
     if (action === 'delete') {
       AuthGate.run(() => {
-        if (confirm('ยืนยันการลบรายชื่อนี้ออกจากระบบ?')) {
+        if (confirm('ຢືນຢັນການລຶບລາຍຊື່ນີ້ອອກຈາກລະບົບ?')) {
           Storage.remove(id);
-          Toast.success('ลบรายชื่อเรียบร้อยแล้ว');
+          Toast.success('ລຶບລາຍຊື່ສຳເລັດ');
           refresh();
         }
       });
@@ -89,8 +89,8 @@ const App = (() => {
   function refresh() {
     const entries = getFilteredEntries();
     const emptyMsg = currentQuery || currentFilter !== 'all'
-      ? 'ไม่พบรายชื่อที่ตรงกับการค้นหา'
-      : 'ยังไม่มีรายชื่อ ลองเพิ่มรายชื่อแบล็กลิสต์แรกของคุณ';
+      ? 'ບໍ່ພົບລາຍຊື່ທີ່ຕົງກັບການຄົ້ນຫາ'
+      : 'ຍັງບໍ່ມີລາຍຊື່ ເພີ່ມລາຍຊື່ແບລັກລິດທຳອິດຂອງທ່ານ';
 
     Renderer.renderList(listContainer, entries, emptyMsg);
 
@@ -120,7 +120,7 @@ const App = (() => {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-    Toast.success('ส่งออกข้อมูลเรียบร้อยแล้ว');
+    Toast.success('ສົ່ງອອກຂໍ້ມູນສຳເລັດ');
   }
 
   function importData(e) {
@@ -131,7 +131,7 @@ const App = (() => {
     reader.onload = (ev) => {
       try {
         const data = JSON.parse(ev.target.result);
-        if (!Array.isArray(data)) throw new Error('รูปแบบไฟล์ไม่ถูกต้อง');
+        if (!Array.isArray(data)) throw new Error('ຮູບແບບໄຟລ໌ບໍ່ຖືກຕ້ອງ');
 
         data.forEach(item => {
           Storage.add({
@@ -144,10 +144,10 @@ const App = (() => {
           });
         });
 
-        Toast.success(`นำเข้าข้อมูล ${data.length} รายการสำเร็จ`);
+        Toast.success(`ນຳເຂົ້າຂໍ້ມູນ ${data.length} ລາຍການສຳເລັດ`);
         refresh();
       } catch (err) {
-        Toast.error('ไม่สามารถนำเข้าไฟล์ได้ ตรวจสอบรูปแบบไฟล์');
+        Toast.error('ບໍ່ສາມາດນຳເຂົ້າໄຟລ໌ໄດ້ ກວດສອບຮູບແບບໄຟລ໌');
         console.error(err);
       }
       e.target.value = '';
