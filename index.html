@@ -657,7 +657,8 @@ function renderList() {
   entries.forEach((entry, idx) => {
     const card = document.createElement('div');
     card.className = 'entry-card';
-    const reportId = entry.id ? String(entry.id).slice(-6) : String(idx + 1).padStart(6,'0');
+    const posInAll = allEntries.findIndex(e => e.id === entry.id);
+    const reportId = String(allEntries.length - posInAll);
     const sameNameCount = allEntries.filter(e => e.name === entry.name).length;
     const totalAmt = allEntries.filter(e => e.name === entry.name && e.amount).reduce((s,e)=>s+Number(e.amount),0);
 

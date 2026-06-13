@@ -299,7 +299,21 @@ async function load() {
     const sameCount = sameSnap.size;
     const totalAmt = sameSnap.docs.reduce((s,d)=>s+Number(d.data().amount||0),0);
 
-    renderEntry(entryData, sameCount, totalAmt);
+    // Sequential report number (oldest = 1), based on all approved entries ordered by createdAt desc
+    const allQ = query(collection(db,'entries'), where('status','==','approved'));
+    const allSnap = await getDocs(allQ);
+    const allSorted = allSnap.docs
+      .map(d => ({ id: d.id, createdAt: d.data().createdAt }))
+      .sort((a,b) => {
+        const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt || 0);
+        const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt || 0);
+        return tb - ta;
+      });
+    const allIds = allSorted.map(e => e.id);
+    const posInAll = allIds.indexOf(entryData.id);
+    const reportNumber = posInAll === -1 ? allIds.length : (allIds.length - posInAll);
+
+    renderEntry(entryData, sameCount, totalAmt, reportNumber);
   } catch (err) {
     console.error(err);
     toast('เกิดข้อผิดพลาดในการโหลดข้อมูล','error');
@@ -314,11 +328,10 @@ function showNotFound() {
   document.getElementById('notFoundMsg').style.display = 'block';
 }
 
-function renderEntry(entry, sameCount, totalAmt) {
+function renderEntry(entry, sameCount, totalAmt, reportNumber) {
   document.title = `${entry.name} – Backlist เช็คก่อนโอน`;
 
-  const reportId = String(entry.id).replace(/\D/g,'').slice(-8) || '0';
-  document.getElementById('reportId').textContent = reportId;
+  document.getElementById('reportId').textContent = String(reportNumber);
   document.getElementById('reportDate').textContent = 'แจ้งเมื่อ ' + formatDate(entry.createdAt);
 
   // Hero
