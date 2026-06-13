@@ -246,24 +246,6 @@ label{display:block;font-size:13px;font-weight:600;color:var(--mint-700);margin-
     <button id="addEntryBtn" class="btn btn-primary">＋ ແຈ້ງແບລັກລິດ</button>
   </div>
 
-  <!-- Filter -->
-  <div class="filter-bar">
-    <button class="filter-chip active" data-tag="all">ທັງໝົດ</button>
-    <button class="filter-chip" data-tag="ບໍ່ສົ່ງສິນຄ້າ">ບໍ່ສົ່ງສິນຄ້າ</button>
-    <button class="filter-chip" data-tag="ຫລອກໂອນເງິນ">ຫລອກໂອນເງິນ</button>
-    <button class="filter-chip" data-tag="ສິນຄ້າບໍ່ຕົງປົກ">ສິນຄ້າບໍ່ຕົງປົກ</button>
-    <button class="filter-chip" data-tag="ຫລອກລົງທຶນ">ຫລອກລົງທຶນ</button>
-    <button class="filter-chip" data-tag="ອື່ນໆ">ອື່ນໆ</button>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-grid">
-    <div class="stat-box"><div class="stat-num" id="totalCount">0</div><div class="stat-label">ລາຍຊື່ທັງໝົດ</div></div>
-    <div class="stat-box alt-coral"><div class="stat-num" id="todayCount">0</div><div class="stat-label">ແຈ້ງໃໝ່ມື້ນີ້</div></div>
-    <div class="stat-box alt-pink"><div class="stat-num" id="noDeliveryCount">0</div><div class="stat-label">ເຄດບໍ່ສົ່ງສິນຄ້າ</div></div>
-    <div class="stat-box alt-blue"><div class="stat-num" id="investCount">0</div><div class="stat-label">ເຄດຫລອກລົງທຶນ</div></div>
-  </div>
-
   <!-- pendingContainer hidden (moved to inbox modal) -->
   <div id="pendingContainer" style="display:none"></div>
 
@@ -820,13 +802,17 @@ document.getElementById('inboxBody').addEventListener('click', async e => {
 function updateStats() {
   const all = allEntries;
   const todayStr = new Date().toDateString();
-  document.getElementById('totalCount').textContent = all.length;
-  document.getElementById('todayCount').textContent = all.filter(e => {
+  const totalEl = document.getElementById('totalCount');
+  const todayEl = document.getElementById('todayCount');
+  const noDeliveryEl = document.getElementById('noDeliveryCount');
+  const investEl = document.getElementById('investCount');
+  if (totalEl) totalEl.textContent = all.length;
+  if (todayEl) todayEl.textContent = all.filter(e => {
     const d = e.createdAt?.toDate ? e.createdAt.toDate() : new Date(e.createdAt || 0);
     return d.toDateString() === todayStr;
   }).length;
-  document.getElementById('noDeliveryCount').textContent = all.filter(e => e.tag === 'ບໍ່ສົ່ງສິນຄ້າ').length;
-  document.getElementById('investCount').textContent = all.filter(e => e.tag === 'ຫລອກລົງທຶນ').length;
+  if (noDeliveryEl) noDeliveryEl.textContent = all.filter(e => e.tag === 'ບໍ່ສົ່ງສິນຄ້າ').length;
+  if (investEl) investEl.textContent = all.filter(e => e.tag === 'ຫລອກລົງທຶນ').length;
 }
 
 /* ===== Auth Gate ===== */
